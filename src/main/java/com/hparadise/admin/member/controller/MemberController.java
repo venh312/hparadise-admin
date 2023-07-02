@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/member")
 public class MemberController {
 
-    @GetMapping("/join/form")
+    @GetMapping("/signUp")
     public String memberJoinForm() {
-        return "member/joinForm";
+        return "member/signUp";
     }
 
     @PostMapping("/save")
