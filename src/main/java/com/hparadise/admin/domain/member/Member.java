@@ -18,7 +18,7 @@ public class Member extends BaseTimeEntity {
     private String prevPwd;
     private String tempPwdYn;
     private int loginFailCnt;
-    private LocalDateTime modifyPwdDate;
+    private LocalDateTime modifiedPwdDate;
     private LocalDateTime loginDate;
     private String useYn;
 }
