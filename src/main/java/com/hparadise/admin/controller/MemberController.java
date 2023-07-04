@@ -1,4 +1,4 @@
-package com.hparadise.admin.member.controller;
+package com.hparadise.admin.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

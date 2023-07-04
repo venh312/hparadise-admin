@@ -1,4 +1,4 @@
-package com.hparadise.admin.member.service;
+package com.hparadise.admin.service;
 
 import org.springframework.stereotype.Service;
 
