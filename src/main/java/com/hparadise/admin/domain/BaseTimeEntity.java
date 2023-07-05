@@ -1,4 +1,4 @@
-package com.hparadise.admin.domain.member;
+package com.hparadise.admin.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
