@@ -12,8 +12,6 @@ public class Program extends BaseTimeEntity {
     @Id
     @GeneratedValue
     private Long id;
-    private Long attendeesFk;
-    private Long attachFileFk;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private String title;
