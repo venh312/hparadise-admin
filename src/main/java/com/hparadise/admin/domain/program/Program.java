@@ -1,5 +1,6 @@
 package com.hparadise.admin.domain.program;
 
+import com.hparadise.admin.domain.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
