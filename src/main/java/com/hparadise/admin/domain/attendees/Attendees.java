@@ -11,6 +11,6 @@ public class Attendees {
     @Id
     @GeneratedValue
     private Long id;
-    private Long programFk;
-    private Long custId;
+    private Long programId;
+    private Long userId;
 }

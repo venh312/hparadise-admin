@@ -4,11 +4,13 @@ import com.hparadise.admin.domain.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import lombok.Builder;
 import lombok.Getter;
 import java.time.LocalDateTime;
 
-@Getter
 @Entity
+@Getter
+@Builder
 public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue
