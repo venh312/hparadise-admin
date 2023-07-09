@@ -97,17 +97,16 @@
                   <span class="app-brand-text demo text-body fw-bolder">hParadise</span>
                 </a>
               </div>
-              <!-- /Logo -->
               <h4 class="mb-2">관리자 등록 🚀</h4>
               <p class="mb-4">아래 정보를 입력해주세요.!</p>
-              <form id="formAuthentication" class="mb-3" action="/member/save" method="POST">
+              <form id="formSignup" class="mb-3" onsubmit="return false;">
                 <div class="mb-3">
-                  <label for="username" class="form-label">이름</label>
+                  <label for="name" class="form-label">이름</label>
                   <input
                     type="text"
                     class="form-control"
-                    id="username"
-                    name="username"
+                    id="name"
+                    name="name"
                     placeholder="이름을 입력해주세요."
                     autofocus
                     required
@@ -118,13 +117,13 @@
                   <input type="text" class="form-control" id="email" name="email" placeholder="이메일을 입력해주세요." required/>
                 </div>
                 <div class="mb-3 form-password-toggle">
-                  <label class="form-label" for="password">비밀번호</label>
+                  <label class="form-label" for="pwd">비밀번호</label>
                   <div class="input-group input-group-merge">
                     <input
                       type="password"
-                      id="password"
+                      id="pwd"
                       class="form-control"
-                      name="password"
+                      name="pwd"
                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                       aria-describedby="password"
                       required
@@ -132,22 +131,11 @@
                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                   </div>
                 </div>
-
-                <div class="mb-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms" />
-                    <label class="form-check-label" for="terms-conditions">
-                      아이디
-                      <a href="javascript:void(0);">저장</a>
-                    </label>
-                  </div>
-                </div>
-                <button class="btn btn-primary d-grid w-100">등록</button>
+                <button class="btn btn-primary d-grid w-100" onclick="javascript:save();">등록</button>
               </form>
-
               <p class="text-center">
                 <span>이미 등록이 되어있습니까?</span>
-                <a href="auth-login-basic.html">
+                <a href="/login">
                   <span>로그인</span>
                 </a>
               </p>
@@ -163,5 +151,27 @@
     <script src="/assets/vendor/js/menu.js"></script>
     <script src="/assets/js/main.js"></script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script>
+      const save = function() {
+        const form = document.querySelector('#formSignup');
+        const formData = new FormData(form);
+        const jsonData = JSON.stringify(Object.fromEntries(formData));
+        fetch("/member/save", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: jsonData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.result > 0)
+              alert('등록되었습니다.\n관리자 승인이 되면 로그인이 가능합니다.')
+            else
+              alert('오류가 발생하였습니다.\n관리자에게 문의해주세요.')
+        })
+        .catch(error => console.error(error));
+      }
+    </script>
   </body>
 </html>
