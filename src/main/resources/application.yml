@@ -6,21 +6,17 @@ spring:
     prefix: file:src/main/resources/templates/
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: ENC(S26VUNMwMQGrekf6b2QILhs01dR7iu2BTNkPi2Q2YmlsyLop8XrRifeYQL0KpQRp)
+    url: ENC(cxgWkJC78u4XgQ9PgwAQDwHJ6+wJnfIpYIhyv6vNihYUdpnfsaDOXIa8MgN1vUJ1)
     username: admin
     password: ENC(CY/t4Xu2Au2cNweK2LrnRQ==)
   jpa:
-    show-sql: true
     properties:
       hibernate:
+        show_sql: true
         format_sql: true
 logging:
   level:
-    root: info
     org:
-      hibernate:
-        type:
-          descriptor:
-            sql: trace
+      hibernate.orm.jdbc.bind: trace
 jasypt:
   key: ${jasypt_key}
