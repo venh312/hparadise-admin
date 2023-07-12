@@ -1,0 +1,22 @@
+server:
+  port: 19090
+spring:
+  thymeleaf:
+    cache: false
+    prefix: file:src/main/resources/templates/
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: ENC(Awuu3PpPUtfLRQNw4x2Wzm9OO5XuAsjH3hg+85bxIcd7HfI9kDJXOvPH8n2+E3ngAr1HVKC9diM=)
+    username: admin
+    password: ENC(CY/t4Xu2Au2cNweK2LrnRQ==)
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+logging:
+  level:
+    org:
+      hibernate.orm.jdbc.bind: trace
+jasypt:
+  key: ${jasypt_key}
