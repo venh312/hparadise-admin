@@ -9,12 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller
-@RequestMapping("/member")
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
+@Controller
 public class MemberController {
 
     private final MemberService memberService;
@@ -41,32 +39,32 @@ public class MemberController {
         return "jsonView";
     }
 
-    @GetMapping("/list")
+    @GetMapping("/member/list")
     public String memberListPage() {
         return "member/list";
     }
 
-    @GetMapping("/detail")
+    @GetMapping("/member/detail")
     public String memberDetailPage() {
         return "member/detail";
     }
 
-    @PostMapping("/info/modify")
+    @PostMapping("/member/info/modify")
     public String memberModify() {
         return "jsonView";
     }
 
-    @PostMapping("/find/id")
+    @PostMapping("/member/find/id")
     public String memberFindId() {
         return "jsonView";
     }
 
-    @PostMapping("/find/password")
+    @PostMapping("/member/find/password")
     public String memberFindPassword() {
         return "jsonView";
     }
 
-    @PostMapping("/delete")
+    @PostMapping("/member/delete")
     public String memberDelete() {
         return "jsonView";
     }
