@@ -23,8 +23,13 @@ public class MemberController {
     }
 
     @GetMapping("/signup")
-    public String memberJoinForm() {
+    public String memberSignupForm() {
         return "member/signup";
+    }
+
+    @GetMapping("/forgot-password")
+    public String memberForgotPasswordForm() {
+        return "member/forgot-password";
     }
 
     @PostMapping("/save")
@@ -32,6 +37,18 @@ public class MemberController {
         long result = 0;
         try {
             result = memberService.save(request);
+        } catch (Exception e) {
+            log.info("[Exception] : {} ", e.getMessage());
+        }
+        model.addAttribute("result", result);
+        return "jsonView";
+    }
+
+    @PostMapping("/forgot-action")
+    public String memberForgot(Model model, @RequestBody MemberSaveRequest request) {
+        long result = 0;
+        try {
+            result = memberService.countByEmail(request.getEmail());
         } catch (Exception e) {
             log.info("[Exception] : {} ", e.getMessage());
         }
