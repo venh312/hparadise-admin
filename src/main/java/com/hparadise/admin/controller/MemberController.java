@@ -18,21 +18,21 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/login")
-    public String memberLoginForm() {
+    public String loginForm() {
         return "member/login";
     }
 
     @GetMapping("/signup")
-    public String memberSignupForm() {
+    public String signupForm() {
         return "member/signup";
     }
 
     @GetMapping("/forgot-password")
-    public String memberForgotPasswordForm() {
+    public String forgotPasswordForm() {
         return "member/forgot-password";
     }
 
-    @PostMapping("/save")
+    @PostMapping("/member-save")
     public String memberSave(Model model, @RequestBody MemberSaveRequest request) {
         long result = 0;
         try {
