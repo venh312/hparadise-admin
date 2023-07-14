@@ -114,7 +114,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="email" class="form-label">이메일</label>
-                  <input type="text" class="form-control" id="email" name="email" placeholder="이메일을 입력해주세요." required/>
+                  <input type="text" class="form-control" id="email" name="email" placeholder="이메일을 입력해주세요." required />
                 </div>
                 <div class="mb-3 form-password-toggle">
                   <label class="form-label" for="pwd">비밀번호</label>
@@ -131,7 +131,7 @@
                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                   </div>
                 </div>
-                <button class="btn btn-primary d-grid w-100" onclick="javascript:save();">등록</button>
+                <button class="btn btn-primary d-grid w-100" type="submit">등록</button>
               </form>
               <p class="text-center">
                 <span>이미 등록이 되어있습니까?</span>
@@ -152,11 +152,12 @@
     <script src="/assets/js/main.js"></script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script>
-      const save = function() {
-        const form = document.querySelector('#formSignup');
+      const form = document.getElementById("formSignup");
+      form.addEventListener("submit", function(e) {
+        e.preventDefault();
         const formData = new FormData(form);
         const jsonData = JSON.stringify(Object.fromEntries(formData));
-        fetch('/member/save', {
+        fetch('/member-save', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -171,7 +172,7 @@
               alert('오류가 발생하였습니다.\n관리자에게 문의해주세요.');
         })
         .catch(error => console.error(error));
-      }
+      });
     </script>
   </body>
 </html>

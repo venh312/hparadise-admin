@@ -99,7 +99,7 @@
               </div>
               <h4 class="mb-2">환영합니다. 👋</h4>
               <p class="mb-4">아래 정보를 입력 후 로그인을 진행해 주세요.</p>
-              <form id="formAuthentication" class="mb-3" action="index.html" method="POST">
+              <form id="formAuthentication" class="mb-3" action="/login-action" method="POST">
                 <div class="mb-3">
                   <label for="email" class="form-label">이메일</label>
                   <input
@@ -107,8 +107,9 @@
                     class="form-control"
                     id="email"
                     name="email-username"
-                    placeholder="Enter your email or username"
+                    placeholder="이메일을 입력해주세요."
                     autofocus
+                    required
                   />
                 </div>
                 <div class="mb-3 form-password-toggle">
@@ -126,6 +127,7 @@
                       name="password"
                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                       aria-describedby="password"
+                      required
                     />
                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                   </div>
