@@ -6,7 +6,7 @@ spring:
     prefix: file:src/main/resources/templates/
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: ENC(cxgWkJC78u4XgQ9PgwAQDwHJ6+wJnfIpYIhyv6vNihYUdpnfsaDOXIa8MgN1vUJ1)
+    url: ENC(Awuu3PpPUtfLRQNw4x2Wzm9OO5XuAsjH3hg+85bxIcd7HfI9kDJXOvPH8n2+E3ngAr1HVKC9diM=)
     username: admin
     password: ENC(CY/t4Xu2Au2cNweK2LrnRQ==)
   jpa:
