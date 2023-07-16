@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="/assets/vendor/css/pages/page-auth.css" />
     <script src="/assets/vendor/js/helpers.js"></script>
     <script src="/assets/js/config.js"></script>
+    <script src="/js/url-strings.js"></script>
   </head>
   <body>
     <div class="container-xxl">
@@ -99,7 +100,7 @@
               </div>
               <h4 class="mb-2">환영합니다. 👋</h4>
               <p class="mb-4">아래 정보를 입력 후 로그인을 진행해 주세요.</p>
-              <form id="formAuthentication" class="mb-3" action="/login-action" method="POST">
+              <form id="formAuthentication" class="mb-3" action="/member/public/login" method="POST">
                 <div class="mb-3">
                   <label for="email" class="form-label">이메일</label>
                   <input
@@ -114,17 +115,17 @@
                 </div>
                 <div class="mb-3 form-password-toggle">
                   <div class="d-flex justify-content-between">
-                    <label class="form-label" for="password">비밀번호</label>
-                    <a href="/forgot-password">
+                    <label class="form-label" for="pwd">비밀번호</label>
+                    <a href="/member/public/forgot-password">
                       <small>비밀번호 찾기</small>
                     </a>
                   </div>
                   <div class="input-group input-group-merge">
                     <input
                       type="password"
-                      id="password"
+                      id="pwd"
                       class="form-control"
-                      name="password"
+                      name="pwd"
                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                       aria-describedby="password"
                       required
@@ -144,7 +145,7 @@
               </form>
               <p class="text-center">
                 <span>계정이 없으신가요?</span>
-                <a href="/signup">
+                <a href="/member/public/signup">
                   <span>회원가입</span>
                 </a>
               </p>

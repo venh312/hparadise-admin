@@ -135,7 +135,7 @@
               </form>
               <p class="text-center">
                 <span>이미 등록이 되어있습니까?</span>
-                <a href="/login">
+                <a href="/member/public/signin">
                   <span>로그인</span>
                 </a>
               </p>
@@ -157,10 +157,11 @@
         e.preventDefault();
         const formData = new FormData(form);
         const jsonData = JSON.stringify(Object.fromEntries(formData));
-        fetch('/member-save', {
+        fetch('/member/public/save', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'X-XSRF-TOKEN': '[[${_csrf.token}]]'
           },
           body: jsonData
         })
@@ -170,6 +171,7 @@
               alert('등록되었습니다.\n관리자 승인이 되면 로그인이 가능합니다.');
             else
               alert('오류가 발생하였습니다.\n관리자에게 문의해주세요.');
+            location.href = '/member/public/signin';
         })
         .catch(error => console.error(error));
       });

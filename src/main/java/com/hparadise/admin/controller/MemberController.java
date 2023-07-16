@@ -9,30 +9,32 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
 @RequiredArgsConstructor
+@RequestMapping("/member")
 @Controller
 public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/login")
+    @GetMapping("/public/signin")
     public String loginForm() {
-        return "member/login";
+        return "member/signin";
     }
 
-    @GetMapping("/signup")
+    @GetMapping("/public/signup")
     public String signupForm() {
         return "member/signup";
     }
 
-    @GetMapping("/forgot-password")
+    @GetMapping("/public/forgot-password")
     public String forgotPasswordForm() {
         return "member/forgot-password";
     }
 
-    @PostMapping("/member-save")
+    @PostMapping("/public/save")
     public String memberSave(Model model, @RequestBody MemberSaveRequest request) {
         long result = 0;
         try {
@@ -44,8 +46,9 @@ public class MemberController {
         return "jsonView";
     }
 
-    @PostMapping("/forgot-action")
+    @PostMapping("/public/forgot")
     public String memberForgot(Model model, @RequestBody MemberSaveRequest request) {
+        log.info("========= TEST : {}", request.getEmail());
         long result = 0;
         try {
             result = memberService.countByEmail(request.getEmail());
@@ -56,32 +59,27 @@ public class MemberController {
         return "jsonView";
     }
 
-    @GetMapping("/member/list")
+    @GetMapping("/list")
     public String memberListPage() {
         return "member/list";
     }
 
-    @GetMapping("/member/detail")
+    @GetMapping("/detail")
     public String memberDetailPage() {
         return "member/detail";
     }
 
-    @PostMapping("/member/info/modify")
+    @PostMapping("/info/modify")
     public String memberModify() {
         return "jsonView";
     }
 
-    @PostMapping("/member/find/id")
+    @PostMapping("/find/id")
     public String memberFindId() {
         return "jsonView";
     }
 
-    @PostMapping("/member/find/password")
-    public String memberFindPassword() {
-        return "jsonView";
-    }
-
-    @PostMapping("/member/delete")
+    @PostMapping("/delete")
     public String memberDelete() {
         return "jsonView";
     }
