@@ -48,7 +48,6 @@ public class MemberController {
 
     @PostMapping("/public/forgot")
     public String memberForgot(Model model, @RequestBody MemberSaveRequest request) {
-        log.info("========= TEST : {}", request.getEmail());
         long result = 0;
         try {
             result = memberService.countByEmail(request.getEmail());
