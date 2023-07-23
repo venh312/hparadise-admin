@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
 @Configuration
@@ -40,13 +41,13 @@ public class SecurityConfig {
             .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer
                 .loginPage("/member/public/signin")
                 .usernameParameter("email")
-                .passwordParameter("pwd")
+                .passwordParameter("password")
                 .loginProcessingUrl("/member/public/login")
                 .successHandler(authSuccessHandler)
                 .failureHandler(authFailureHandler)
             )
             .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer
-                .logoutUrl("/member/public/signout")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/member/public/logout")) // 로그아웃 URL
                 .logoutSuccessUrl("/member/public/signin")
                 .invalidateHttpSession(true) // 인증정보를 지우하고 세션을 무효화
                 .deleteCookies("JSESSIONID", "remember-me") // JSESSIONID, remember-me 쿠키 삭제

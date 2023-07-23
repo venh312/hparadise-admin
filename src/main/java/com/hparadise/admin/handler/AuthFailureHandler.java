@@ -1,7 +1,7 @@
 package com.hparadise.admin.handler;
 
+import com.hparadise.admin.common.AuthStatus;
 import com.hparadise.admin.service.MemberService;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,6 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
-import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,22 +21,18 @@ public class AuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
     private final MemberService memberService;
 
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        log.info("==> onAuthenticationFailure");
-        String email= request.getParameter("email");
-        String msg = "msg.member.not.match";
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) {
+        log.info("===> onAuthenticationFailure");
 
-        if (exception instanceof DisabledException) {
-            msg = "msg.member.not.enabled";
-        } else if (exception instanceof CredentialsExpiredException) {
-            msg = "msg.member.not.credentialsExpired";
-        } else if (exception instanceof LockedException) {
-            msg = "msg.member.not.accountLocked";
-        }
+        if (exception instanceof DisabledException)
+            response.setStatus(AuthStatus.NOT_ENABLED.getValue());
+        else if (exception instanceof CredentialsExpiredException)
+            response.setStatus(AuthStatus.NOT_CREDENTIAL.getValue());
+        else if (exception instanceof LockedException)
+            response.setStatus(AuthStatus.NOT_LOCK.getValue());
+        else
+            response.setStatus(AuthStatus.NOT_MATCH.getValue());
 
-        //memberService.updateLoginFailCount(email);
-
-        setDefaultFailureUrl("/member/public/login?msg=" + msg + "&email=" + email);
-        super.onAuthenticationFailure(request, response, exception);
+        memberService.updateLoginFailCnt(request.getParameter("email"));
     }
 }
