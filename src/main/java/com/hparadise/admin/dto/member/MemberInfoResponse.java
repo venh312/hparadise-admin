@@ -9,11 +9,11 @@ public class MemberInfoResponse {
     private Long id;
     private String name;
     private String email;
-    private String pwd;
-    private String prevPwd;
-    private String tempPwdYn;
+    private String password;
+    private String prevPassword;
+    private String tempPasswordYn;
     private int loginFailCnt;
-    private LocalDateTime modifiedPwdDate;
+    private LocalDateTime modifiedPasswordDate;
     private LocalDateTime loginDate;
     private String useYn;
 
@@ -21,11 +21,11 @@ public class MemberInfoResponse {
         this.id = member.getId();
         this.name = member.getName();
         this.email = member.getEmail();
-        this.pwd = member.getPwd();
-        this.prevPwd = member.getPrevPwd();
-        this.tempPwdYn = member.getTempPwdYn();
+        this.password = member.getPassword();
+        this.prevPassword = member.getPrevPassword();
+        this.tempPasswordYn = member.getTempPasswordYn();
         this.loginFailCnt = member.getLoginFailCnt();
-        this.modifiedPwdDate = member.getModifiedPwdDate();
+        this.modifiedPasswordDate = member.getModifiedPasswordDate();
         this.loginDate = member.getLoginDate();
         this.useYn = member.getUseYn();
     }

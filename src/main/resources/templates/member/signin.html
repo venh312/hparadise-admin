@@ -6,6 +6,7 @@
   data-theme="theme-default"
   data-assets-path="/assets/"
   data-template="vertical-menu-template-free"
+  xmlns:th="http://www.thymeleaf.org"
 >
   <head>
     <meta charset="utf-8" />
@@ -31,6 +32,7 @@
     <script src="/assets/vendor/js/helpers.js"></script>
     <script src="/assets/js/config.js"></script>
     <script src="/js/url-strings.js"></script>
+    <script src="/js/message.js"></script>
   </head>
   <body>
     <div class="container-xxl">
@@ -100,14 +102,14 @@
               </div>
               <h4 class="mb-2">환영합니다. 👋</h4>
               <p class="mb-4">아래 정보를 입력 후 로그인을 진행해 주세요.</p>
-              <form id="formAuthentication" class="mb-3" action="/member/public/login" method="POST">
+              <form id="formAuthentication" class="mb-3">
                 <div class="mb-3">
                   <label for="email" class="form-label">이메일</label>
                   <input
                     type="text"
                     class="form-control"
                     id="email"
-                    name="email-username"
+                    name="email"
                     placeholder="이메일을 입력해주세요."
                     autofocus
                     required
@@ -115,7 +117,7 @@
                 </div>
                 <div class="mb-3 form-password-toggle">
                   <div class="d-flex justify-content-between">
-                    <label class="form-label" for="pwd">비밀번호</label>
+                    <label class="form-label" for="password">비밀번호</label>
                     <a href="/member/public/forgot-password">
                       <small>비밀번호 찾기</small>
                     </a>
@@ -123,9 +125,9 @@
                   <div class="input-group input-group-merge">
                     <input
                       type="password"
-                      id="pwd"
+                      id="password"
                       class="form-control"
-                      name="pwd"
+                      name="password"
                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                       aria-describedby="password"
                       required
@@ -154,12 +156,39 @@
         </div>
       </div>
     </div>
-    <script src="/assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="/assets/vendor/libs/popper/popper.js"></script>
-    <script src="/assets/vendor/js/bootstrap.js"></script>
-    <script src="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-    <script src="/assets/vendor/js/menu.js"></script>
-    <script src="/assets/js/main.js"></script>
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script>
+      const form = document.getElementById("formAuthentication");
+      form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        const formData = new FormData(form);
+        fetch('/member/public/login', {
+          method: 'POST',
+          headers: {
+            'X-XSRF-TOKEN': '[[${_csrf.token}]]'
+          },
+          body: formData
+        })
+        .then(response => {
+          const url = response.url;
+          const status = response.status;
+          if (url.indexOf('member/list') > -1) {
+            location.href = url;
+          } else {
+            if (status == 601) {
+              alert(msg.member.not.match);
+            } else if (status == 602) {
+              alert(msg.member.not.enabled);
+            } else if (status == 603) {
+              alert(msg.member.not.credentialsExpired);
+            } else if (status == 604) {
+              alert(msg.member.not.accountLocked);
+            } else {
+              alert(msg.error);
+            }
+          }
+        })
+        .catch(error => console.error(error));
+      });
+    </script>
   </body>
 </html>

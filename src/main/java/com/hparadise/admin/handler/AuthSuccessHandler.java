@@ -1,5 +1,7 @@
 package com.hparadise.admin.handler;
 
+import com.hparadise.admin.common.AuthStatus;
+import com.hparadise.admin.domain.member.Member;
 import com.hparadise.admin.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 import java.io.IOException;
 
 @Slf4j
@@ -19,16 +23,15 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        log.info("==> onAuthenticationSuccess");
-//        Member.Response member = (Member.Response) authentication.getPrincipal();
-//
-//        if (member.getLoginFailCount() > 4) {
-//            memberService.updateCredentialsNonExpired(member.getId(), "N");
-//            response.sendRedirect("/member/public/login?msg=msg.member.not.credentialsExpired&email=" + member.getEmail());
-//        } else if (member.isEnabled() && member.isCredentialsNonExpired() && member.isAccountNonLocked()) {
-//            memberService.updateLastLoginTime(member.getId(), AuthorizationUtil.getClientIp(request));
-//            RequestContextHolder.getRequestAttributes().setAttribute("member", member, RequestAttributes.SCOPE_SESSION);
-//            response.sendRedirect("/dashboard");
-//        }
+        log.info("===> onAuthenticationSuccess");
+        Member member = (Member) authentication.getPrincipal();
+
+        if (member.getLoginFailCnt() > 9) {
+            response.setStatus(AuthStatus.NOT_LOCK.getValue());
+        } else if (member.isEnabled() && member.isAccountNonLocked()) {
+            RequestContextHolder.getRequestAttributes().setAttribute("member", member, RequestAttributes.SCOPE_SESSION);
+            memberService.updateLastLogin(member.getEmail());
+            response.sendRedirect("/member/list");
+        }
     }
 }
