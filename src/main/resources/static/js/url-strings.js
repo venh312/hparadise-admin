@@ -1,5 +1,3 @@
 const url = {
-  member: {
-    signin: '/member/public/login'
- }
+  signin: '/member/public/signin'
 }
