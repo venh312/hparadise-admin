@@ -30,6 +30,8 @@
     <link rel="stylesheet" href="/assets/vendor/css/pages/page-auth.css" />
     <script src="/assets/vendor/js/helpers.js"></script>
     <script src="/assets/js/config.js"></script>
+    <script src="/js/url-strings.js"></script>
+    <script src="/js/message.js"></script>
   </head>
   <body>
     <div class="container-xxl">
@@ -168,10 +170,10 @@
         .then(response => response.json())
         .then(data => {
             if (data.result > 0)
-              alert('등록되었습니다.\n관리자 승인이 되면 로그인이 가능합니다.');
+              alert(msg.register);
             else
-              alert('오류가 발생하였습니다.\n관리자에게 문의해주세요.');
-            location.href = '/member/public/signin';
+              alert(msg.error);
+            location.href = url.signin;
         })
         .catch(error => console.error(error));
       });
