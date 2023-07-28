@@ -2,6 +2,7 @@ package com.hparadise.admin.handler;
 
 import com.hparadise.admin.common.AuthStatus;
 import com.hparadise.admin.service.MemberService;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
