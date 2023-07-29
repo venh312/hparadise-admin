@@ -47,18 +47,18 @@ public class SecurityConfig {
                 .failureHandler(authFailureHandler)
             )
             .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer
-                .logoutRequestMatcher(new AntPathRequestMatcher("/member/public/logout")) // 로그아웃 URL
+                .logoutRequestMatcher(new AntPathRequestMatcher("/member/public/logout"))
                 .logoutSuccessUrl("/member/public/signin")
-                .invalidateHttpSession(true) // 인증정보를 지우하고 세션을 무효화
+                .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID", "remember-me") // JSESSIONID, remember-me 쿠키 삭제
             )
             .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
                 .maximumSessions(1) // 세션 최대 허용 수 1, -1인 경우 무제한 세션 허용
                 .maxSessionsPreventsLogin(false) // true면 중복 로그인을 막고, false면 이전 로그인의 세션을 해제
-                .expiredUrl("/member/public/signin?msg=msg.member.sessionExpired") // 세션이 만료된 경우 이동 할 페이지를 지정
+                .expiredUrl("/member/public/signin?msg=msg.member.sessionExpired")
             )
             .rememberMe(httpSecurityRememberMeConfigurer -> httpSecurityRememberMeConfigurer
-                .alwaysRemember(false) // 항상 기억할 것인지 여부
+                .alwaysRemember(false)
                 .tokenValiditySeconds(43200) // in seconds, 12시간 유지
                 .rememberMeParameter("remember-me")
             );
