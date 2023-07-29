@@ -163,23 +163,29 @@
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         const data = new FormData(form);
-        post('/member/public/forgot', 'application/x-www-form-urlencoded', data, '[[${_csrf.token}]]', function(r) {
+        post('/member/public/login', '', data, '[[${_csrf.token}]]', function(r) {
           const url = r.url;
           const status = r.status;
           if (url.indexOf('member/list') > -1) {
             location.href = url;
-          } else {
-            if (status == 601) {
+            return;
+          }
+          switch (status) {
+            case 601:
               alert(msg.member.not.match);
-            } else if (status == 602) {
+              break;
+            case 602:
               alert(msg.member.not.enabled);
-            } else if (status == 603) {
+              break;
+            case 603:
               alert(msg.member.not.credentialsExpired);
-            } else if (status == 604) {
+              break;
+            case 604:
               alert(msg.member.not.accountLocked);
-            } else {
+              break;
+            default:
               alert(msg.error);
-            }
+              break;
           }
         });
       });
