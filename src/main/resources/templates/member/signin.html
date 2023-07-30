@@ -164,13 +164,10 @@
         e.preventDefault();
         const data = new FormData(form);
         post('/member/public/login', '', data, '[[${_csrf.token}]]', function(r) {
-          const url = r.url;
-          const status = r.status;
-          if (url.indexOf('member/list') > -1) {
-            location.href = url;
-            return;
-          }
-          switch (status) {
+          switch (r.status) {
+            case 600:
+              location.href = '/dashboard';
+              break;
             case 601:
               alert(msg.member.not.match);
               break;
