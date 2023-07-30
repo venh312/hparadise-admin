@@ -32,6 +32,8 @@
     <script src="/assets/js/config.js"></script>
     <script src="/js/url-strings.js"></script>
     <script src="/js/message.js"></script>
+    <script src="/js/ui-functions.js"></script>
+    <script src="/js/http-functions.js"></script>
   </head>
   <body>
     <div class="container-xxl">
@@ -101,7 +103,7 @@
               </div>
               <h4 class="mb-2">관리자 등록 🚀</h4>
               <p class="mb-4">아래 정보를 입력해주세요.!</p>
-              <form id="formSignup" class="mb-3" onsubmit="return false;">
+              <form id="formSignup" class="mb-3">
                 <div class="mb-3">
                   <label for="name" class="form-label">이름</label>
                   <input
@@ -146,36 +148,18 @@
         </div>
       </div>
     </div>
-    <script src="/assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="/assets/vendor/libs/popper/popper.js"></script>
-    <script src="/assets/vendor/js/bootstrap.js"></script>
-    <script src="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-    <script src="/assets/vendor/js/menu.js"></script>
-    <script src="/assets/js/main.js"></script>
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script>
       const form = document.getElementById("formSignup");
       form.addEventListener("submit", function(e) {
         e.preventDefault();
         const formData = new FormData(form);
-        const jsonData = JSON.stringify(Object.fromEntries(formData));
-        fetch('/member/public/save', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-XSRF-TOKEN': '[[${_csrf.token}]]'
-          },
-          body: jsonData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.result > 0)
-              alert(msg.register);
-            else
-              alert(msg.error);
-            location.href = url.signin;
-        })
-        .catch(error => console.error(error));
+        const data = JSON.stringify(Object.fromEntries(formData));
+        post('/member/public/save', 'application/json', data, '[[${_csrf.token}]]', function(r) {
+          if (r.result > 0)
+            alert(msg.register);
+          else
+            alert(msg.error);
+        });
       });
     </script>
   </body>
