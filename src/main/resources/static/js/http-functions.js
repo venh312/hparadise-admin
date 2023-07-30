@@ -1,4 +1,6 @@
 const base = function(url, method, contentType, data, xsrfToken, callback) {
+  loadingDisplay('');
+
   const headers = new Headers();
   if (contentType) headers.append('Content-Type', contentType);
   if (xsrfToken) headers.append('X-XSRF-TOKEN', xsrfToken);
@@ -10,10 +12,13 @@ const base = function(url, method, contentType, data, xsrfToken, callback) {
   })
   .then(response => {
     console.log('Server response:', response);
+    loadingDisplay('none');
+
     if (!response.ok) {
       callback(response);
       throw new Error('Network response was not ok');
     }
+
     return response.json();
   })
   .then(data => {
