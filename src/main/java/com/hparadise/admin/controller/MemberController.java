@@ -1,15 +1,14 @@
 package com.hparadise.admin.controller;
 
+import com.hparadise.admin.domain.member.Member;
 import com.hparadise.admin.dto.member.MemberSaveRequest;
+import com.hparadise.admin.dto.member.MemberSearchRequest;
 import com.hparadise.admin.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -59,7 +58,10 @@ public class MemberController {
     }
 
     @GetMapping("/list")
-    public String memberListPage() {
+    public String memberListPage(Model model, MemberSearchRequest request,
+        @RequestParam(required = false, defaultValue = "0") Integer page,
+        @RequestParam(required = false, defaultValue = "8") Integer pageSize) {
+        model.addAttribute("resultMap", memberService.findAll(request, page, pageSize));
         return "member/list";
     }
 
