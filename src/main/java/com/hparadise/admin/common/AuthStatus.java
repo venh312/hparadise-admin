@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum AuthStatus {
+    SUCCESS(600),
     NOT_MATCH(601),
     NOT_ENABLED(602),
     NOT_CREDENTIAL(603),

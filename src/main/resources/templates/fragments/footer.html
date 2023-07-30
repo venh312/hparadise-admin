@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <th:block th:fragment="footerFragment">
+    <footer class="content-footer footer bg-footer-theme">
+      <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+        <div class="mb-2 mb-md-0">
+          ©
+          <script>
+            document.write(new Date().getFullYear());
+          </script>
+          , made with ❤️ by theta
+        </div>
+      </div>
+      <script src="/assets/vendor/libs/jquery/jquery.js"></script>
+      <script src="/assets/vendor/libs/popper/popper.js"></script>
+      <script src="/assets/vendor/js/bootstrap.js"></script>
+      <script src="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+      <script src="/assets/vendor/js/menu.js"></script>
+      <script src="/assets/js/main.js"></script>
+      <script async defer src="https://buttons.github.io/buttons.js"></script>
+    </footer>
+    <div class="content-backdrop fade"></div>
+  </th:block>
+</html>

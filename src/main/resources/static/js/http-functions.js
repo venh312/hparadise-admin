@@ -9,16 +9,16 @@ const base = function(url, method, contentType, data, xsrfToken, callback) {
     body: data
   })
   .then(response => {
-    console.log(response);
-    if (response.json().length > 0) {
-      response.json().then((data) => {
-        callback(data);
-      }).catch((error) => {
-        console.error(error);
-      });
-    } else {
+    console.log('Server response:', response);
+    if (!response.ok) {
       callback(response);
+      throw new Error('Network response was not ok');
     }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Server Data:', data);
+    callback(data);
   })
   .catch(error => console.error(error));
 }

@@ -31,7 +31,9 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         } else if (member.isEnabled() && member.isAccountNonLocked()) {
             RequestContextHolder.getRequestAttributes().setAttribute("member", member, RequestAttributes.SCOPE_SESSION);
             memberService.updateLastLogin(member.getEmail());
-            response.sendRedirect("/member/list");
+            response.setStatus(AuthStatus.SUCCESS.getValue());
+        } else {
+            response.setStatus(AuthStatus.NOT_ENABLED.getValue());
         }
     }
 }

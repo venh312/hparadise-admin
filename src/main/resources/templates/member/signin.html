@@ -14,7 +14,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
-    <title>로그인</title>
+    <title>hParadise | 로그인</title>
     <meta name="description" content="" />
     <link rel="icon" type="image/x-icon" href="/assets/img/favicon/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -164,12 +164,10 @@
         e.preventDefault();
         const data = new FormData(form);
         post('/member/public/login', '', data, '[[${_csrf.token}]]', function(r) {
-          const url = r.url;
-          const status = r.status;
-          if (url.indexOf('member/list') > -1) {
-            location.href = url;
-            return;
-          }
+          switch (r.status) {
+            case 600:
+              location.href = url.dashboard;
+              break;
           switch (status) {
             case 601:
               alert(msg.member.not.match);
