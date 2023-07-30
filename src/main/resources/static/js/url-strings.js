@@ -5,7 +5,7 @@ const url = {
     signup: '/member/public/signup',
     forgot: {
       password: '/member/public/forgot-password'
-    }
+    },
     list: '/member/list',
     detail: '/member/detail'
   }
