@@ -123,5 +123,4 @@ public class MemberService implements UserDetailsService {
             .where(member.id.eq(request.getId()))
             .execute();
     }
-
 }

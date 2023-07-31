@@ -1,5 +1,6 @@
 package com.hparadise.admin.controller;
 
+import com.hparadise.admin.domain.member.Member;
 import com.hparadise.admin.dto.member.MemberSaveRequest;
 import com.hparadise.admin.dto.member.MemberSearchRequest;
 import com.hparadise.admin.service.MemberService;

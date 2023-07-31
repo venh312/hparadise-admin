@@ -18,7 +18,7 @@ const base = function(url, method, contentType, data, xsrfToken, callback) {
       callback(response);
       throw new Error('Network response was not ok');
     }
-
+    
     return response.json();
   })
   .then(data => {

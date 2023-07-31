@@ -33,14 +33,12 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         } else if (member.isEnabled() && member.isAccountNonLocked()) {
             RequestContextHolder.getRequestAttributes().setAttribute("member", member, RequestAttributes.SCOPE_SESSION);
             memberService.updateLastLogin(member.getEmail());
-
             CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
             if (csrfToken != null) {
                 Cookie cookie = new Cookie("XSRF-TOKEN", csrfToken.getToken());
                 cookie.setPath("/");
                 response.addCookie(cookie);
             }
-
             response.setStatus(AuthStatus.SUCCESS.getValue());
         } else {
             response.setStatus(AuthStatus.NOT_ENABLED.getValue());
