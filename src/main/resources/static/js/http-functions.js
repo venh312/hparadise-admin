@@ -35,3 +35,11 @@ const get = function(url, contentType, data, xsrfToken, callback) {
 const post = function(url, contentType, data, xsrfToken, callback) {
   base(url, 'POST', contentType, data, xsrfToken, callback);
 }
+
+const put = function(url, contentType, data, xsrfToken, callback) {
+  base(url, 'PUT', contentType, data, xsrfToken, callback);
+}
+
+const del = function(url, contentType, data, xsrfToken, callback) {
+  base(url, 'DELETE', contentType, data, xsrfToken, callback);
+}
