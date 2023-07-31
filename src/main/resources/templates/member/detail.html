@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="/assets/"
+  data-template="vertical-menu-template-free"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/default_layout}">
+
+<th:block layout:fragment="content">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card mb-4">
+          <div class="card-body">
+            <form id="formAccountSettings" method="POST" onsubmit="return false">
+              <div class="row">
+                <div class="mb-3 col-md-6">
+                  <label for="organization" class="form-label">이름</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="organization"
+                    name="organization"
+                    th:value="${info.name}"
+                    disabled
+                  />
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label for="email" class="form-label">이메일</label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="email"
+                    name="email"
+                    th:value="${info.email}"
+                    placeholder="john.doe@example.com"
+                    disabled
+                  />
+                </div>
+                <div class="mb-3 col-md-6">
+                </div>
+                <div class="mb-3 col-md-6"></div>
+                <div class="mb-3 col-md-6">
+                  <label class="form-label">상태</label>
+                  <div class="demo-inline-spacing">
+                    <span class="badge bg-primary" th:if="${info.useYn eq 'Y'}">Primary</span>
+                    <span class="badge bg-danger" th:unless="${info.useYn eq 'Y'}">Danger</span>
+                  </div>
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label class="form-label" for="role">역할</label>
+                  <select class="select2 form-select" id="role" name="role" onchange="changeRole()">
+                    <option value="BASIC">일반</option>
+                    <option value="TEACHER">선생님</option>
+                    <option value="HOUSE">시설관리</option>
+                    <option value="ADMIN">관리자</option>
+                  </select>
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label class="form-label">로그인 일시</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    th:value="${info.loginDate}"
+                    disabled
+                  />
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label class="form-label">비밀번호 변경일시</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    th:value="${info.modifiedPasswordDate}"
+                    disabled
+                  />
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label class="form-label">등록 일시</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    th:value="${info.createDate}"
+                    disabled
+                  />
+                </div>
+              </div>
+              <div class="mt-2">
+                <a href="/member/list" class="btn btn-primary">목록</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const changeRole = function() {
+      const role = document.getElementById('role');
+      let data = {
+        id: '[[${info.id}]]',
+        role: role.value,
+      };
+      put('/member/role', 'application/json', JSON.stringify(data), '[[${_csrf.token}]]', function(r) {
+      });
+    }
+  </script>
+</th:block>
+</html>
