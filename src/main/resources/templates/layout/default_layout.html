@@ -5,6 +5,11 @@
   <!-- header -->
   <th:block th:replace="fragments/header :: headerFragment"></th:block>
   <body>
+    <div class="centered text-center" id="loading" style="display:none">
+      <div class="spinner-border spinner-border-lg text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
