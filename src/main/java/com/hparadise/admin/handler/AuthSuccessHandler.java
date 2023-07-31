@@ -3,12 +3,14 @@ package com.hparadise.admin.handler;
 import com.hparadise.admin.common.AuthStatus;
 import com.hparadise.admin.domain.member.Member;
 import com.hparadise.admin.service.MemberService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -31,6 +33,12 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         } else if (member.isEnabled() && member.isAccountNonLocked()) {
             RequestContextHolder.getRequestAttributes().setAttribute("member", member, RequestAttributes.SCOPE_SESSION);
             memberService.updateLastLogin(member.getEmail());
+            CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+            if (csrfToken != null) {
+                Cookie cookie = new Cookie("XSRF-TOKEN", csrfToken.getToken());
+                cookie.setPath("/");
+                response.addCookie(cookie);
+            }
             response.setStatus(AuthStatus.SUCCESS.getValue());
         } else {
             response.setStatus(AuthStatus.NOT_ENABLED.getValue());

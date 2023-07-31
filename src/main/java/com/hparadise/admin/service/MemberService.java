@@ -111,4 +111,16 @@ public class MemberService implements UserDetailsService {
 
         return resultMap;
     }
+
+    public MemberInfoResponse findById(Long id) {
+        return new MemberInfoResponse(memberRepository.findById(id).get());
+    }
+
+    @Transactional
+    public long updateRole(MemberSearchRequest request) {
+        return jpaQueryFactory.update(member)
+            .set(member.role, request.getRole())
+            .where(member.id.eq(request.getId()))
+            .execute();
+    }
 }

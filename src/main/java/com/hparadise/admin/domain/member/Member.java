@@ -29,6 +29,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
     private String password;
     private String prevPassword;
     private String tempPasswordYn;
+    private String role;
     private int loginFailCnt;
     private LocalDateTime modifiedPasswordDate;
     private LocalDateTime loginDate;

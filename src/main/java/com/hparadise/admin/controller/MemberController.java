@@ -66,7 +66,8 @@ public class MemberController {
     }
 
     @GetMapping("/detail")
-    public String memberDetailPage() {
+    public String memberDetailPage(Model model, MemberSearchRequest request) {
+        model.addAttribute("info", memberService.findById(request.getId()));
         return "member/detail";
     }
 
@@ -82,6 +83,16 @@ public class MemberController {
 
     @PostMapping("/delete")
     public String memberDelete() {
+        return "jsonView";
+    }
+
+    @PutMapping("/role")
+    public String updateRole(Model model, @RequestBody MemberSearchRequest request) {
+        try {
+            model.addAttribute("result", memberService.updateRole(request));
+        } catch (Exception e) {
+            log.info("[Exception] : {} ", e.getMessage());
+        }
         return "jsonView";
     }
 }
