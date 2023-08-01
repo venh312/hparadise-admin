@@ -47,7 +47,20 @@ public class MemberController {
 
     @PostMapping("/public/forgot")
     public String memberForgot(Model model, @RequestBody MemberSaveRequest request) {
-        long result = 0;
+        int result = 0;
+        try {
+            result = memberService.countByEmail(request.getEmail());
+        } catch (Exception e) {
+            log.info("[Exception] : {} ", e.getMessage());
+        }
+        model.addAttribute("result", result);
+        return "jsonView";
+    }
+
+
+    @PostMapping("/public/count-email")
+    public String countByEmail(Model model, @RequestBody MemberSaveRequest request) {
+        int result = 0;
         try {
             result = memberService.countByEmail(request.getEmail());
         } catch (Exception e) {
