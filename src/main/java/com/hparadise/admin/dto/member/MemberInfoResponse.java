@@ -43,13 +43,4 @@ public class MemberInfoResponse extends BaseTimeEntity {
         this.loginDate = toStringDateTime(loginDate);
         this.createDate = toStringDateTime(createDate);
     }
-
-    public MemberInfoResponse(Long id, String name, String email, String useYn, LocalDateTime loginDate, LocalDateTime createDate) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.useYn = useYn;
-        this.loginDate = toStringDateTime(loginDate);
-        this.createDate = toStringDateTime(createDate);
-    }
 }

@@ -159,11 +159,19 @@
         e.preventDefault();
         const formData = new FormData(form);
         const data = JSON.stringify(Object.fromEntries(formData));
-        post('/member/public/save', 'application/json', data, '[[${_csrf.token}]]', function(r) {
-          if (r.result > 0)
-            alert(msg.register);
-          else
-            alert(msg.error);
+        post('/member/public/count-email', 'application/json', data, '[[${_csrf.token}]]', function(r) {
+          if (r.result > 0) {
+            alert(msg.member.email.already);
+            return;
+          }
+          post('/member/public/save', 'application/json', data, '[[${_csrf.token}]]', function(r) {
+            if (r.result > 0) {
+              alert(msg.register);
+              location.href = url.member.signin;
+            } else {
+              alert(msg.error);
+            }
+          });
         });
       });
     </script>
