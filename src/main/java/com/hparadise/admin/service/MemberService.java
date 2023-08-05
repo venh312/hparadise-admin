@@ -3,6 +3,7 @@ package com.hparadise.admin.service;
 import com.hparadise.admin.domain.member.Member;
 import com.hparadise.admin.domain.member.MemberRepository;
 import com.hparadise.admin.domain.member.QMember;
+import com.hparadise.admin.dto.member.MemberExpression;
 import com.hparadise.admin.dto.member.MemberInfoResponse;
 import com.hparadise.admin.dto.member.MemberSaveRequest;
 import com.hparadise.admin.dto.member.MemberSearchRequest;
@@ -82,17 +83,22 @@ public class MemberService implements UserDetailsService {
     //                                .where(member.id.eq(board.registerId)), "registerName")
             ))
             .from(member)
-    //                .where(
-    //                    containsSearch(request.getSearch()),
-    //                    eqType(request.getType())
-    //                )
+            .where(
+                MemberExpression.containsTargetDate(member, request.getTargetDate(), request.getStartDate(), request.getEndDate()),
+                //MemberExpression.containsTarget(member, request.getTarget(), request.getSearch()),
+                MemberExpression.eqUseYn(member, request.getUseYn())
+            )
             .offset(page)
             .limit(pageSize)
             .orderBy(member.createdDate.desc())
             .fetch();
 
         Long totalCnt = (long) jpaQueryFactory.select(member.count()).from(member)
-            //.where(containsSearch(request.getSearch()), eqType(request.getType()))
+            .where(
+                MemberExpression.containsTargetDate(member, request.getTargetDate(), request.getStartDate(), request.getEndDate()),
+                MemberExpression.containsTarget(member, request.getTarget(), request.getSearch()),
+                MemberExpression.eqUseYn(member, request.getUseYn())
+            )
             .fetchOne();
 
         int totalPage = (int) Math.ceil((float) totalCnt / pageSize);

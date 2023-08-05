@@ -5,11 +5,14 @@ const base = function(url, method, contentType, data, xsrfToken, callback) {
   if (contentType) headers.append('Content-Type', contentType);
   if (xsrfToken) headers.append('X-XSRF-TOKEN', xsrfToken);
 
-  fetch(url, {
+  const requestOptions = {
     method: method,
-    headers: headers,
-    body: data
-  })
+    headers: headers
+  };
+
+  if (data) requestOptions.body = data;
+
+  fetch(url, requestOptions)
   .then(response => {
     console.log('Server response:', response);
     loadingDisplay('none');
@@ -29,7 +32,7 @@ const base = function(url, method, contentType, data, xsrfToken, callback) {
 }
 
 const get = function(url, contentType, data, xsrfToken, callback) {
-  base(url, 'GET', contentType, data, xsrfToken, callback);
+  base(url, 'GET', contentType, '', xsrfToken, callback);
 }
 
 const post = function(url, contentType, data, xsrfToken, callback) {
