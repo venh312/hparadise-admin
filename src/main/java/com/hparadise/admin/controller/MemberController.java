@@ -72,10 +72,18 @@ public class MemberController {
 
     @GetMapping("/list")
     public String memberListPage(Model model, MemberSearchRequest request,
-        @RequestParam(required = false, defaultValue = "0") Integer page,
-        @RequestParam(required = false, defaultValue = "8") Integer pageSize) {
+                                    @RequestParam(required = false, defaultValue = "0") Integer page,
+                                    @RequestParam(required = false, defaultValue = "8") Integer pageSize) {
         model.addAttribute("resultMap", memberService.findAll(request, page, pageSize));
         return "member/list";
+    }
+
+    @GetMapping("/list-search")
+    public String memberListSearch(Model model, MemberSearchRequest request,
+                                    @RequestParam(required = false, defaultValue = "0") Integer page,
+                                    @RequestParam(required = false, defaultValue = "8") Integer pageSize) {
+        model.addAttribute("resultMap", memberService.findAll(request, page, pageSize));
+        return "jsonView";
     }
 
     @GetMapping("/detail")

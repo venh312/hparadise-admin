@@ -15,4 +15,9 @@ public class MemberSearchRequest extends BaseTimeEntity {
     private String role;
     private LocalDateTime loginDate;
     private String useYn;
+    private String targetDate;
+    private String startDate;
+    private String endDate;
+    private String target;
+    private String search;
 }

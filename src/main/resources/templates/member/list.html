@@ -12,6 +12,65 @@
   <th:block layout:fragment="content">
     <div class="container-xxl flex-grow-1 container-p-y">
       <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">관리자 /</span> 목록</h4>
+      <div class="col-xxl">
+        <div class="card mb-4">
+          <div class="card-header d-flex align-items-center justify-content-between">
+            <h5 class="mb-0">검색</h5>
+            <small class="text-muted float-end">관리자 목록 검색</small>
+          </div>
+          <div class="card-body">
+            <form id="formMemberList">
+              <input type="hidden" id="page" name="page" value="0"/>
+              <input type="hidden" id="pageSize" name="pageSize" value="8"/>
+              <div class="row mb-3">
+                <div class="col-sm-1">
+                  <label for="targetDate" class="form-label">일시</label>
+                  <select id="targetDate" name="targetDate" class="form-select sm-1">
+                    <option value="ALL">전체</option>
+                    <option value="loginDate">로그인</option>
+                    <option value="createDate">등록</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label for="startDate" class="form-label">시작 일시</label>
+                  <input class="form-control" type="date" id="startDate" name="startDate">
+                </div>
+                <div class="col-md-3">
+                  <label for="endDate" class="form-label">종료 일시</label>
+                  <input class="form-control" type="date" id="endDate" name="endDate">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-1">
+                  <label for="target" class="form-label">조건</label>
+                  <select id="target" name="target" class="form-select">
+                    <option value="ALL">전체</option>
+                    <option value="name">이름</option>
+                    <option value="email">이메일</option>
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <label for="search" class="form-label">내용</label>
+                  <input type="text" class="form-control" id="search" name="search">
+                </div>
+                <div class="col-sm-1">
+                  <label for="useYn" class="form-label">상태</label>
+                  <select id="useYn" name="useYn" class="form-select sm-1">
+                    <option value="">전체</option>
+                    <option value="Y">활성</option>
+                    <option value="N">비활성</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-10">
+                  <button type="button" class="btn btn-primary" onclick="fnSearch()">검색</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
       <div class="card">
         <div class="table-responsive text-nowrap" style="height:400px;">
           <table class="table table-striped">
@@ -25,7 +84,7 @@
                 <th width="15%">등록 일시</th>
               </tr>
             </thead>
-            <tbody class="table-border-bottom-0">
+            <tbody class="table-border-bottom-0" id="tBody">
               <tr th:each="list,status: ${resultMap.list}">
                 <td th:text="${(resultMap.totalCnt - status.index) - (resultMap.pageSize * (resultMap.page / resultMap.pageSize))}">1</td>
                 <td th:text="${list.name}"></td>
@@ -33,7 +92,7 @@
                   <a th:href="@{/member/detail(id=${list.id})}"><strong th:text="${list.email}"></strong></a>
                 </td>
                 <td th:if="${list.useYn eq 'Y'}"><span class="badge bg-label-primary me-1">활성</span></td>
-                <td th:unless="${list.useYn eq 'Y'}"><span class="badge bg-label-danger me-1">중지</span></td>
+                <td th:unless="${list.useYn eq 'Y'}"><span class="badge bg-label-danger me-1">비활성</span></td>
                 <td th:text="${list.loginDate}"></td>
                 <td th:text="${list.createDate}"></td>
               </tr>
@@ -47,19 +106,26 @@
                 <nav aria-label="Page navigation">
                   <ul class="pagination">
                     <li class="page-item first">
-                      <a class="page-link" th:href="@{/member/list(page=0, pageSize=${resultMap.pageSize})}">
+                      <button class="page-link"
+                        th:data-page="0"
+                        th:data-pageSize="${resultMap.pageSize}"
+                        onclick="fnPageMove(this)">
                         <i class="tf-icon bx bx-chevrons-left"></i>
-                      </a>
+                      </button>
                     </li>
                     <li class="page-item"
-                        th:each="index : ${#numbers.sequence(resultMap.startPage, resultMap.endPage)}"
-                        th:classappend="${index == resultMap.currentPage} ? active">
-                      <a class="page-link" th:href="@{/member/list(page=${resultMap.pageSize * (index - 1)}, pageSize=${resultMap.pageSize})}" th:text="${index}"></a>
+                      th:each="index : ${#numbers.sequence(resultMap.startPage, resultMap.endPage)}"
+                      th:id="pageItem + ${index}"
+                      th:classappend="${index == resultMap.currentPage} ? active">
+                      <button class="page-link" id="pageLink" th:text="${index}"
+                       th:data-page="${resultMap.pageSize * (index - 1)}"
+                       th:data-pageSize="${resultMap.pageSize}"
+                       onclick="fnPageMove(this)"></button>
                     </li>
                     <li class="page-item last" th:if="${resultMap.totalCnt > resultMap.pageSize}">
-                      <a class="page-link" th:href="@{/member/list(page=${resultMap.totalCnt - resultMap.pageSize}, pageSize=${resultMap.pageSize})}">
+                      <button class="page-link" th:href="@{/member/list(page=${resultMap.totalCnt - resultMap.pageSize}, pageSize=${resultMap.pageSize})}">
                         <i class="tf-icon bx bx-chevrons-right"></i>
-                      </a>
+                      </button>
                     </li>
                   </ul>
                 </nav>
@@ -69,5 +135,61 @@
         </div>
       </div>
     </div>
+    <script>
+      const form = document.getElementById("formMemberList");
+      const fnSearch = function() {
+        const formData = new FormData(form);
+        const urlSearchParams = new URLSearchParams();
+        for (const pair of formData.entries()) {
+          urlSearchParams.append(pair[0], pair[1]);
+        }
+        const urlParameters = urlSearchParams.toString();
+        const url = `/member/list-search?${urlParameters}`;
+        get(url, 'application/json', '', '[[${_csrf.token}]]', function(r) {
+          tBody.innerHTML = '';
+          let html = '';
+          if (r.resultMap.list.length > 0) {
+            const resultMap = r.resultMap;
+            const tBody = document.getElementById('tBody');
+            resultMap.list.forEach((item, index) => {
+              html += '<tr>';
+              html += '<td>'+((resultMap.totalCnt - index) - (resultMap.pageSize * (resultMap.page / resultMap.pageSize)))+'</td>';
+              html += '<td>'+item.name+'</td>';
+              html += '<td>';
+              html += '<a href="/member/detail?id="'+item.id+'><strong>'+item.email+'</strong></a>';
+              html += '</td>';
+
+              if (item.useYn == 'Y')
+                html += '<td><span class="badge bg-label-primary me-1">활성</span></td>';
+              else
+                html += '<td><span class="badge bg-label-danger me-1">비활성</span></td>';
+
+              html += '<td>'+item.loginDate+'</td>';
+              html += '<td>'+item.createDate+'</td>';
+              html += '</tr>';
+            });
+
+            tBody.innerHTML = html;
+           } else {
+            html += '<tr>';
+            html += '<td colspan="7" rowspan="8">검색 결과가 없습니다.</td>';
+            html += '</tr>';
+            tBody.innerHTML = html;
+           }
+        });
+      }
+
+      const fnPageMove = function(obj) {
+        const pageItem = document.querySelectorAll('.page-item');
+        pageItem.forEach(function(element, index) {
+          element.classList.remove('active');
+        });
+        obj.parentNode.classList.add('active');
+
+        document.getElementById('page').value = obj.getAttribute('data-page');
+        document.getElementById('pageSize').value = obj.getAttribute('data-pageSize');
+        fnSearch();
+      }
+    </script>
   </th:block>
 </html>
