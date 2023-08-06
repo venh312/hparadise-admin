@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
+@Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -85,7 +86,7 @@ public class MemberService implements UserDetailsService {
             .from(member)
             .where(
                 MemberExpression.containsTargetDate(member, request.getTargetDate(), request.getStartDate(), request.getEndDate()),
-                //MemberExpression.containsTarget(member, request.getTarget(), request.getSearch()),
+                MemberExpression.containsTarget(member, request.getTarget(), request.getSearch()),
                 MemberExpression.eqUseYn(member, request.getUseYn())
             )
             .offset(page)

@@ -19,7 +19,7 @@
             <small class="text-muted float-end">관리자 목록 검색</small>
           </div>
           <div class="card-body">
-            <form id="formMemberList">
+            <form id="formMemberList" onsubmit="return false;">
               <input type="hidden" id="page" name="page" value="0"/>
               <input type="hidden" id="pageSize" name="pageSize" value="8"/>
               <div class="row mb-3">
@@ -64,7 +64,12 @@
               </div>
               <div class="row">
                 <div class="col-sm-10">
-                  <button type="button" class="btn btn-primary" onclick="fnSearch()">검색</button>
+                  <button type="button" class="btn btn-primary" onclick="fnSearch()">
+                    <span class="tf-icons bx bx-search"></span>&nbsp; 검색
+                  </button>
+                  <button type="button" class="btn btn-secondary" onclick="javascript:location.href='/member/list'">
+                    <span class="tf-icons bx bx-reset"></span>&nbsp; 새로고침
+                  </button>
                 </div>
               </div>
             </form>
@@ -104,8 +109,8 @@
             <div class="col">
               <div class="demo-inline-spacing">
                 <nav aria-label="Page navigation">
-                  <ul class="pagination">
-                    <li class="page-item first">
+                  <ul class="pagination" id="pagination">
+                    <li class="page-item first" id="pageItemFirst">
                       <button class="page-link"
                         th:data-page="0"
                         th:data-pageSize="${resultMap.pageSize}"
@@ -115,15 +120,17 @@
                     </li>
                     <li class="page-item"
                       th:each="index : ${#numbers.sequence(resultMap.startPage, resultMap.endPage)}"
-                      th:id="pageItem + ${index}"
                       th:classappend="${index == resultMap.currentPage} ? active">
                       <button class="page-link" id="pageLink" th:text="${index}"
                        th:data-page="${resultMap.pageSize * (index - 1)}"
                        th:data-pageSize="${resultMap.pageSize}"
                        onclick="fnPageMove(this)"></button>
                     </li>
-                    <li class="page-item last" th:if="${resultMap.totalCnt > resultMap.pageSize}">
-                      <button class="page-link" th:href="@{/member/list(page=${resultMap.totalCnt - resultMap.pageSize}, pageSize=${resultMap.pageSize})}">
+                    <li class="page-item last" th:if="${(resultMap.totalCnt - resultMap.pageSize) >= resultMap.pageSize}">
+                      <button class="page-link"
+                        th:data-page="${resultMap.totalCnt - resultMap.pageSize}"
+                        th:data-pageSize="${resultMap.pageSize}"
+                        onclick="fnPageMove(this)">
                         <i class="tf-icon bx bx-chevrons-right"></i>
                       </button>
                     </li>
@@ -140,17 +147,18 @@
       const fnSearch = function() {
         const formData = new FormData(form);
         const urlSearchParams = new URLSearchParams();
-        for (const pair of formData.entries()) {
+
+        for (const pair of formData.entries())
           urlSearchParams.append(pair[0], pair[1]);
-        }
+
         const urlParameters = urlSearchParams.toString();
         const url = `/member/list-search?${urlParameters}`;
         get(url, 'application/json', '', '[[${_csrf.token}]]', function(r) {
+          const tBody = document.getElementById('tBody');
           tBody.innerHTML = '';
           let html = '';
           if (r.resultMap.list.length > 0) {
             const resultMap = r.resultMap;
-            const tBody = document.getElementById('tBody');
             resultMap.list.forEach((item, index) => {
               html += '<tr>';
               html += '<td>'+((resultMap.totalCnt - index) - (resultMap.pageSize * (resultMap.page / resultMap.pageSize)))+'</td>';
@@ -170,6 +178,7 @@
             });
 
             tBody.innerHTML = html;
+            fnPageItemHtml(resultMap);
            } else {
             html += '<tr>';
             html += '<td colspan="7" rowspan="8">검색 결과가 없습니다.</td>';
@@ -185,11 +194,43 @@
           element.classList.remove('active');
         });
         obj.parentNode.classList.add('active');
-
         document.getElementById('page').value = obj.getAttribute('data-page');
         document.getElementById('pageSize').value = obj.getAttribute('data-pageSize');
         fnSearch();
       }
+
+      const fnPageItemHtml = function(resultMap) {
+        let html = '<li class="page-item first" id="pageItemFirst">';
+        html += '<button class="page-link" data-page="0" data-pageSize="8" onclick="fnPageMove(this)">';
+        html += '<i class="tf-icon bx bx-chevrons-left"></i>';
+        html += '</button>';
+        html += '</li>';
+
+        for (var i = resultMap.startPage; i <= resultMap.endPage; i++) {
+          let page = resultMap.pageSize * (i - 1);
+          if (resultMap.currentPage == i)
+            html += '<li class="page-item active">';
+          else
+            html += '<li class="page-item">';
+          html += '<button class="page-link" id="pageLink" data-page="'+page+'" data-pageSize="'+resultMap.pageSize+'" onclick="fnPageMove(this)">'+i+'</button>';
+          html += '</li>';
+        }
+
+        const lastPage = (resultMap.totalCnt - resultMap.pageSize);
+        if (lastPage >= resultMap.pageSize) {
+          html += '<li class="page-item last">';
+          html += '<button class="page-link" data-page="'+(resultMap.totalCnt - resultMap.pageSize)+'" data-pageSize="'+resultMap.pageSize+'" onclick="fnPageMove(this)">';
+          html += '<i class="tf-icon bx bx-chevrons-right"></i>';
+          html += '</button>';
+          html += '</li>';
+        }
+
+        document.getElementById('pagination').innerHTML = html;
+      }
+
+      document.getElementById("search").addEventListener("keyup", function(event) {
+        if (event.key === "Enter") fnSearch();
+      });
     </script>
   </th:block>
 </html>
