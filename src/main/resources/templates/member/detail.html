@@ -73,10 +73,10 @@
                 <div class="mb-3 col-md-6">
                   <label class="form-label" for="role">역할</label>
                   <select class="select2 form-select" id="role" name="role" onchange="changeRole()">
-                    <option value="BASIC">일반</option>
-                    <option value="TEACHER">선생님</option>
-                    <option value="HOUSE">시설관리</option>
-                    <option value="ADMIN">관리자</option>
+                    <option value="BASIC" th:selected="${info.role eq 'BASIC'}">일반</option>
+                    <option value="TEACHER" th:selected="${info.role eq 'TEACHER'}">선생님</option>
+                    <option value="HOUSE" th:selected="${info.role eq 'HOUSE'}">시설관리</option>
+                    <option value="ADMIN" th:selected="${info.role eq 'ADMIN'}">관리자</option>
                   </select>
                 </div>
                 <div class="mb-3 col-md-6">
@@ -108,7 +108,7 @@
                 </div>
               </div>
               <div class="mt-2">
-                <a href="/member/list" class="btn btn-primary">목록</a>
+                <a href="./list" class="btn btn-primary">목록</a>
               </div>
             </form>
           </div>
