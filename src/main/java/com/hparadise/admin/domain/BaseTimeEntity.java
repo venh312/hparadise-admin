@@ -20,11 +20,4 @@ public abstract class BaseTimeEntity {
     private LocalDateTime createdDate;
     @LastModifiedDate
     private LocalDateTime modifiedDate;
-
-    public static String toStringDateTime(LocalDateTime localDateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return Optional.ofNullable(localDateTime)
-            .map(formatter::format)
-            .orElse("");
-    }
 }

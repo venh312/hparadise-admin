@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="/assets/"
+  data-template="vertical-menu-template-free"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/default_layout}">
+
+<th:block layout:fragment="content">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">고객 문의 /</span> 상세 정보</h4>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="mb-3 col-md-6">
+                <label for="organization" class="form-label">문의 형태</label>
+                <div class="demo-inline-spacing">
+                  <span class="badge bg-primary" th:if="${info.type eq 'JOIN'}">가입</span>
+                  <span class="badge bg-warning" th:if="${info.type eq 'PRICE'}">가격</span>
+                  <span class="badge bg-danger" th:if="${info.type eq 'ETC'}">기타</span>
+                </div>
+              </div>
+              <div class="mb-3 col-md-6">
+                <label for="email" class="form-label">이메일</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  id="email"
+                  name="email"
+                  th:value="${info.email}"
+                  readonly
+                />
+              </div>
+              <div class="mb-3 col-md-6">
+                <label for="organization" class="form-label">이름</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="organization"
+                  name="organization"
+                  th:value="${info.name}"
+                  readonly
+                />
+              </div>
+              <div class="mb-3 col-md-6">
+                <label for="email" class="form-label">연락처</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  th:value="${info.phoneNumber}"
+                  readonly
+                />
+              </div>
+              <div class="mb-3 col-md-12">
+                <div>
+                  <label for="exampleFormControlTextarea1" class="form-label">문의 내용</label>
+                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="8" readonly></textarea>
+                </div>
+              </div>
+              <div class="mb-3 col-md-6">
+                <label class="form-label">등록 일시</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  th:value="${info.createdDate}"
+                  readonly
+                />
+              </div>
+              <div class="mb-3 col-md-6">
+                <label class="form-label">변경 일시</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  th:value="${info.modifiedDate}"
+                  readonly
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card mb-4 mb-xl-0">
+          <form id="formAnswer">
+            <h5 class="card-header">답변 상태</h5>
+            <div class="card-body">
+              <div class="mb-3">
+                <label class="form-label">상태</label>
+                <select id="answerStatus" name="answerStatus" class="form-select sm-1">
+                  <option value="">전체</option>
+                  <option value="C">완료</option>
+                  <option value="H">보류</option>
+                  <option value="W">대기</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="answerTitle" class="form-label">답변 제목</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  id="answerTitle"
+                  name="answerTitle"
+                  th:value="${info.answerTitle}"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="answerContents" class="form-label">답변 내용</label>
+                <textarea class="form-control" id="answerContents" rows="8"></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="answerDate" class="form-label">답변 등록 일시</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="answerDate"
+                  name="answerDate"
+                  th:value="${info.answerDate}"
+                  readonly
+                />
+              </div>
+              <div class="mb-3">
+                <a href="./list" class="btn btn-primary">목록</a>
+                <a href="fnAnswer()" class="btn btn-info">등록</a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const fnAnswer = function() {
+      const answerStatus = document.getElementById('answerStatus');
+      let data = {
+        id: '[[${info.id}]]',
+        role: answerStatus.value,
+      };
+      put('/inquiry/answer-status', 'application/json', JSON.stringify(data), '[[${_csrf.token}]]', function(r) {
+      });
+    }
+  </script>
+</th:block>
+</html>

@@ -2,6 +2,7 @@ package com.hparadise.admin.dto.member;
 
 import com.hparadise.admin.domain.BaseTimeEntity;
 import com.hparadise.admin.domain.member.Member;
+import com.hparadise.admin.util.DateUtils;
 import lombok.Getter;
 import java.time.LocalDateTime;
 
@@ -29,10 +30,10 @@ public class MemberInfoResponse extends BaseTimeEntity {
         this.tempPasswordYn = member.getTempPasswordYn();
         this.role = member.getRole();
         this.loginFailCnt = member.getLoginFailCnt();
-        this.modifiedPasswordDate = toStringDateTime(member.getModifiedPasswordDate());
+        this.modifiedPasswordDate = DateUtils.toStringDateTime(member.getModifiedPasswordDate());
         this.useYn = member.getUseYn();
-        this.loginDate = toStringDateTime(member.getLoginDate());
-        this.createDate = toStringDateTime(member.getCreatedDate());
+        this.loginDate = DateUtils.toStringDateTime(member.getLoginDate());
+        this.createDate = DateUtils.toStringDateTime(member.getCreatedDate());
     }
 
     public MemberInfoResponse(Long id, String name, String email, String useYn, LocalDateTime loginDate, LocalDateTime createDate) {
@@ -40,7 +41,7 @@ public class MemberInfoResponse extends BaseTimeEntity {
         this.name = name;
         this.email = email;
         this.useYn = useYn;
-        this.loginDate = toStringDateTime(loginDate);
-        this.createDate = toStringDateTime(createDate);
+        this.loginDate = DateUtils.toStringDateTime(loginDate);
+        this.createDate = DateUtils.toStringDateTime(createDate);
     }
 }

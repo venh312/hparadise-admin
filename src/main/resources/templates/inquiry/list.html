@@ -11,15 +11,15 @@
   layout:decorate="~{layout/default_layout}">
   <th:block layout:fragment="content">
     <div class="container-xxl flex-grow-1 container-p-y">
-      <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">관리자 /</span> 목록</h4>
+      <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">고객 문의 /</span> 목록</h4>
       <div class="col-xxl">
         <div class="card mb-4">
           <div class="card-header d-flex align-items-center justify-content-between">
             <h5 class="mb-0">검색</h5>
-            <small class="text-muted float-end">관리자 목록 검색</small>
+            <small class="text-muted float-end">고객 문의 목록 검색</small>
           </div>
           <div class="card-body">
-            <form id="formMemberList" onsubmit="return false;">
+            <form id="formInquiryList" onsubmit="return false;">
               <input type="hidden" id="page" name="page" value="0"/>
               <input type="hidden" id="pageSize" name="pageSize" value="8"/>
               <div class="row mb-3">
@@ -27,8 +27,8 @@
                   <label for="targetDate" class="form-label">일시</label>
                   <select id="targetDate" name="targetDate" class="form-select sm-1">
                     <option value="ALL">전체</option>
-                    <option value="loginDate">로그인</option>
                     <option value="createDate">등록</option>
+                    <option value="answerDate">답변</option>
                   </select>
                 </div>
                 <div class="col-md-3">
@@ -54,11 +54,12 @@
                   <input type="text" class="form-control" id="search" name="search">
                 </div>
                 <div class="col-sm-1">
-                  <label for="useYn" class="form-label">상태</label>
-                  <select id="useYn" name="useYn" class="form-select sm-1">
+                  <label for="answerStatus" class="form-label">답변 상태</label>
+                  <select id="answerStatus" name="answerStatus" class="form-select sm-1">
                     <option value="">전체</option>
-                    <option value="Y">활성</option>
-                    <option value="N">비활성</option>
+                    <option value="C">완료</option>
+                    <option value="H">보류</option>
+                    <option value="W">대기</option>
                   </select>
                 </div>
               </div>
@@ -84,8 +85,7 @@
                 <th width="10%">번호</th>
                 <th width="20%">이름</th>
                 <th width="30%">이메일</th>
-                <th width="10%">상태</th>
-                <th width="15%">로그인 일시</th>
+                <th width="10%">답변 상태</th>
                 <th width="15%">등록 일시</th>
               </tr>
             </thead>
@@ -95,17 +95,17 @@
                   <td th:text="${(resultMap.totalCnt - status.index) - (resultMap.pageSize * (resultMap.page / resultMap.pageSize))}">1</td>
                   <td th:text="${list.name}"></td>
                   <td>
-                    <a th:href="@{/member/detail(id=${list.id})}"><strong th:text="${list.email}"></strong></a>
+                    <a th:href="@{./detail(id=${list.id})}"><strong th:text="${list.email}"></strong></a>
                   </td>
-                  <td th:if="${list.useYn eq 'Y'}"><span class="badge bg-label-primary me-1">활성</span></td>
-                  <td th:unless="${list.useYn eq 'Y'}"><span class="badge bg-label-danger me-1">비활성</span></td>
-                  <td th:text="${list.loginDate}"></td>
-                  <td th:text="${list.createDate}"></td>
+                  <td th:if="${list.answerStatus eq 'C'}"><span class="badge bg-label-primary me-1">완료</span></td>
+                  <td th:if="${list.answerStatus eq 'H'}"><span class="badge bg-label-warning me-1">보류</span></td>
+                  <td th:if="${list.answerStatus eq 'W'}"><span class="badge bg-label-danger me-1">대기</span></td>
+                  <td th:text="${list.createdDate}"></td>
                 </tr>
               </th:block>
               <th:block th:unless="${#lists.size(resultMap.list)}">
                 <tr align="center">
-                  <td colspan="7" rowspan="8">검색 결과가 없습니다.</td>
+                  <td colspan="5" rowspan="8">검색 결과가 없습니다.</td>
                 </tr>
               </th:block>
             </tbody>
@@ -150,7 +150,7 @@
       </div>
     </div>
     <script>
-      const form = document.getElementById("formMemberList");
+      const form = document.getElementById("formInquiryList");
       const fnSearch = function() {
         const formData = new FormData(form);
         const urlSearchParams = new URLSearchParams();
@@ -159,7 +159,7 @@
           urlSearchParams.append(pair[0], pair[1]);
 
         const urlParameters = urlSearchParams.toString();
-        const url = `/member/list-search?${urlParameters}`;
+        const url = `./list-search?${urlParameters}`;
         get(url, 'application/json', '', '[[${_csrf.token}]]', function(r) {
           const tBody = document.getElementById('tBody');
           tBody.innerHTML = '';
@@ -171,16 +171,17 @@
               html += '<td>'+((resultMap.totalCnt - index) - (resultMap.pageSize * (resultMap.page / resultMap.pageSize)))+'</td>';
               html += '<td>'+item.name+'</td>';
               html += '<td>';
-              html += '<a href="/member/detail?id="'+item.id+'><strong>'+item.email+'</strong></a>';
+              html += '<a href="./detail?id="'+item.id+'><strong>'+item.email+'</strong></a>';
               html += '</td>';
 
-              if (item.useYn == 'Y')
-                html += '<td><span class="badge bg-label-primary me-1">활성</span></td>';
+              if (item.answerStatus == 'C')
+                html += '<td><span class="badge bg-label-primary me-1">완료</span></td>';
+              else if (item.answerStatus == 'H')
+                html += '<td><span class="badge bg-label-warning me-1">보류</span></td>';
               else
-                html += '<td><span class="badge bg-label-danger me-1">비활성</span></td>';
+                html += '<td><span class="badge bg-label-danger me-1">대기</span></td>';
 
-              html += '<td>'+item.loginDate+'</td>';
-              html += '<td>'+item.createDate+'</td>';
+              html += '<td>'+item.createdDate+'</td>';
               html += '</tr>';
             });
 
@@ -188,7 +189,7 @@
             fnPageItemHtml(resultMap);
            } else {
             html += '<tr align="center">';
-            html += '<td colspan="7" rowspan="8">검색 결과가 없습니다.</td>';
+            html += '<td colspan="5" rowspan="8">검색 결과가 없습니다.</td>';
             html += '</tr>';
             tBody.innerHTML = html;
            }
