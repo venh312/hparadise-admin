@@ -67,7 +67,7 @@
                   <button type="button" class="btn btn-primary" onclick="fnSearch()">
                     <span class="tf-icons bx bx-search"></span>&nbsp; 검색
                   </button>
-                  <button type="button" class="btn btn-secondary" onclick="javascript:location.href='/member/list'">
+                  <button type="button" class="btn btn-secondary" onclick="javascript:location.href='./list'">
                     <span class="tf-icons bx bx-reset"></span>&nbsp; 새로고침
                   </button>
                 </div>
@@ -90,17 +90,24 @@
               </tr>
             </thead>
             <tbody class="table-border-bottom-0" id="tBody">
-              <tr th:each="list,status: ${resultMap.list}">
-                <td th:text="${(resultMap.totalCnt - status.index) - (resultMap.pageSize * (resultMap.page / resultMap.pageSize))}">1</td>
-                <td th:text="${list.name}"></td>
-                <td>
-                  <a th:href="@{/member/detail(id=${list.id})}"><strong th:text="${list.email}"></strong></a>
-                </td>
-                <td th:if="${list.useYn eq 'Y'}"><span class="badge bg-label-primary me-1">활성</span></td>
-                <td th:unless="${list.useYn eq 'Y'}"><span class="badge bg-label-danger me-1">비활성</span></td>
-                <td th:text="${list.loginDate}"></td>
-                <td th:text="${list.createDate}"></td>
-              </tr>
+              <th:block th:if="${#lists.size(resultMap.list)}">
+                <tr th:each="list,status: ${resultMap.list}">
+                  <td th:text="${(resultMap.totalCnt - status.index) - (resultMap.pageSize * (resultMap.page / resultMap.pageSize))}">1</td>
+                  <td th:text="${list.name}"></td>
+                  <td>
+                    <a th:href="@{/member/detail(id=${list.id})}"><strong th:text="${list.email}"></strong></a>
+                  </td>
+                  <td th:if="${list.useYn eq 'Y'}"><span class="badge bg-label-primary me-1">활성</span></td>
+                  <td th:unless="${list.useYn eq 'Y'}"><span class="badge bg-label-danger me-1">비활성</span></td>
+                  <td th:text="${list.loginDate}"></td>
+                  <td th:text="${list.createDate}"></td>
+                </tr>
+              </th:block>
+              <th:block th:unless="${#lists.size(resultMap.list)}">
+                <tr align="center">
+                  <td colspan="7" rowspan="8">검색 결과가 없습니다.</td>
+                </tr>
+              </th:block>
             </tbody>
           </table>
         </div>
@@ -180,7 +187,7 @@
             tBody.innerHTML = html;
             fnPageItemHtml(resultMap);
            } else {
-            html += '<tr>';
+            html += '<tr align="center">';
             html += '<td colspan="7" rowspan="8">검색 결과가 없습니다.</td>';
             html += '</tr>';
             tBody.innerHTML = html;
