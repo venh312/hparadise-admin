@@ -2,14 +2,16 @@ package com.hparadise.admin.service;
 
 import com.hparadise.admin.domain.inquiry.InquiryRepository;
 import com.hparadise.admin.domain.inquiry.QInquiry;
+import com.hparadise.admin.dto.inquiry.InquiryAnswerRequest;
 import com.hparadise.admin.dto.inquiry.InquirySearchRequest;
 import com.hparadise.admin.dto.inquiry.InquiryExpression;
 import com.hparadise.admin.dto.inquiry.InquiryInfoResponse;
-import com.hparadise.admin.dto.member.MemberInfoResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,6 +22,7 @@ public class InquiryService {
     private final JPAQueryFactory jpaQueryFactory;
     private final QInquiry inquiry = QInquiry.inquiry;
 
+    @Transactional(readOnly = true)
     public HashMap<String, Object> findAll(InquirySearchRequest request, Integer page, Integer pageSize) {
         HashMap<String, Object> resultMap = new HashMap<>();
 
@@ -68,7 +71,20 @@ public class InquiryService {
         return resultMap;
     }
 
+    @Transactional(readOnly = true)
     public InquiryInfoResponse findById(Long id) {
         return new InquiryInfoResponse(inquiryRepository.findById(id).get());
     }
+
+    @Transactional
+    public long inquiryAnswerSave(InquiryAnswerRequest request) {
+        return jpaQueryFactory.update(inquiry)
+            .set(inquiry.answerStatus, request.getAnswerStatus())
+            .set(inquiry.answerTitle, request.getAnswerTitle())
+            .set(inquiry.answerContents, request.getAnswerContents())
+            .set(inquiry.answerDate, LocalDateTime.now())
+            .where(inquiry.id.eq(request.getId()))
+            .execute();
+    }
+
 }

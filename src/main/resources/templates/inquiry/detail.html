@@ -88,19 +88,19 @@
         </div>
         <div class="card mb-4 mb-xl-0">
           <form id="formAnswer">
+            <input type="hidden" id="id" name="id" th:value="${info.id}">
             <h5 class="card-header">답변 상태</h5>
             <div class="card-body">
               <div class="mb-3">
                 <label class="form-label">상태</label>
                 <select id="answerStatus" name="answerStatus" class="form-select sm-1">
-                  <option value="">전체</option>
-                  <option value="C">완료</option>
-                  <option value="H">보류</option>
-                  <option value="W">대기</option>
+                  <option value="C" th:selected="${info.answerStatus eq 'C'}">완료</option>
+                  <option value="H" th:selected="${info.answerStatus eq 'H'}">보류</option>
+                  <option value="W" th:selected="${info.answerStatus eq 'W'}">대기</option>
                 </select>
               </div>
               <div class="mb-3">
-                <label for="answerTitle" class="form-label">답변 제목</label>
+                <label for="answerTitle" class="form-label">제목</label>
                 <input
                   class="form-control"
                   type="text"
@@ -110,11 +110,11 @@
                 />
               </div>
               <div class="mb-3">
-                <label for="answerContents" class="form-label">답변 내용</label>
-                <textarea class="form-control" id="answerContents" rows="8"></textarea>
+                <label for="answerContents" class="form-label">내용</label>
+                <textarea class="form-control" id="answerContents" name="answerContents" rows="8" th:text="${info.answerContents}"></textarea>
               </div>
               <div class="mb-3">
-                <label for="answerDate" class="form-label">답변 등록 일시</label>
+                <label for="answerDate" class="form-label">등록 일시</label>
                 <input
                   type="text"
                   class="form-control"
@@ -126,7 +126,7 @@
               </div>
               <div class="mb-3">
                 <a href="./list" class="btn btn-primary">목록</a>
-                <a href="fnAnswer()" class="btn btn-info">등록</a>
+                <a href="javascript:" onclick="fnAnswerSave()" class="btn btn-info" th:if="${info.answerStatus ne 'C'}">등록</a>
               </div>
             </div>
           </form>
@@ -135,14 +135,18 @@
     </div>
   </div>
   <script>
-    const fnAnswer = function() {
-      const answerStatus = document.getElementById('answerStatus');
-      let data = {
-        id: '[[${info.id}]]',
-        role: answerStatus.value,
-      };
-      put('/inquiry/answer-status', 'application/json', JSON.stringify(data), '[[${_csrf.token}]]', function(r) {
-      });
+    const fnAnswerSave = function() {
+      if (confirm(msg.confirm.register)) {
+        const form = document.getElementById("formAnswer");
+        const formData = new FormData(form);
+        const data = JSON.stringify(Object.fromEntries(formData));
+        post('/inquiry/answer', 'application/json', data, '[[${_csrf.token}]]', function(r) {
+          if (r.result > 0) {
+            alert(msg.register);
+            location.reload();
+          }
+        });
+      }
     }
   </script>
 </th:block>
