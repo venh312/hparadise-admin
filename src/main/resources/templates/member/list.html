@@ -171,7 +171,7 @@
               html += '<td>'+((resultMap.totalCnt - index) - (resultMap.pageSize * (resultMap.page / resultMap.pageSize)))+'</td>';
               html += '<td>'+item.name+'</td>';
               html += '<td>';
-              html += '<a href="/member/detail?id="'+item.id+'><strong>'+item.email+'</strong></a>';
+              html += '<a href="./detail?id='+item.id+'"><strong>'+item.email+'</strong></a>';
               html += '</td>';
 
               if (item.useYn == 'Y')
