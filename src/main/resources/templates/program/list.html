@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="/assets/"
+  data-template="vertical-menu-template-free"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/default_layout}">
+  <th:block layout:fragment="content">
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">프로그램 /</span> 목록</h4>
+      <div class="col-xxl">
+        <div class="card mb-4">
+          <div class="card-header d-flex align-items-center justify-content-between">
+            <h5 class="mb-0">검색</h5>
+            <small class="text-muted float-end">프로그램 목록 검색</small>
+          </div>
+          <div class="card-body">
+            <form id="formInquiryList" onsubmit="return false;">
+              <input type="hidden" id="page" name="page" value="0"/>
+              <input type="hidden" id="pageSize" name="pageSize" value="8"/>
+              <div class="row mb-3">
+                <div class="col-sm-1">
+                  <label for="targetDate" class="form-label">일시</label>
+                  <select id="targetDate" name="targetDate" class="form-select sm-1">
+                    <option value="ALL">전체</option>
+                    <option value="createDate">등록</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label for="startDate" class="form-label">시작 일시</label>
+                  <input class="form-control" type="date" id="startDate" name="startDate" onchange="changeDate(this)">
+                </div>
+                <div class="col-md-3">
+                  <label for="endDate" class="form-label">종료 일시</label>
+                  <input class="form-control" type="date" id="endDate" name="endDate" onchange="changeDate(this)">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-1">
+                  <label for="target" class="form-label">조건</label>
+                  <select id="target" name="target" class="form-select">
+                    <option value="ALL">전체</option>
+                    <option value="name">이름</option>
+                    <option value="email">이메일</option>
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <label for="search" class="form-label">내용</label>
+                  <input type="text" class="form-control" id="search" name="search">
+                </div>
+                <div class="col-sm-1">
+                  <label for="answerStatus" class="form-label">답변 상태</label>
+                  <select id="answerStatus" name="answerStatus" class="form-select sm-1">
+                    <option value="">전체</option>
+                    <option value="C">완료</option>
+                    <option value="H">보류</option>
+                    <option value="W">대기</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-10">
+                  <button type="button" class="btn btn-primary" onclick="fnSearch()">
+                    <span class="tf-icons bx bx-search"></span>&nbsp; 검색
+                  </button>
+                  <button type="button" class="btn btn-secondary" onclick="javascript:location.href='./list'">
+                    <span class="tf-icons bx bx-reset"></span>&nbsp; 새로고침
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="table-responsive text-nowrap" style="height:400px;">
+          <table class="table table-striped">
+            <thead>
+              <tr align="center">
+                <th width="10%">번호</th>
+                <th width="10%">상태</th>
+                <th width="40%">프로그램명</th>
+                <th width="15%">장소</th>
+                <th width="10%">사용 유무</th>
+                <th width="15%">등록 일시</th>
+              </tr>
+            </thead>
+            <tbody class="table-border-bottom-0" id="tBody">
+              <th:block th:if="${#lists.size(resultMap.list)}">
+                <tr th:each="list,status: ${resultMap.list}">
+                  <td th:text="${(resultMap.totalCnt - status.index) - (resultMap.pageSize * (resultMap.page / resultMap.pageSize))}">1</td>
+                  <td th:if="${list.status eq 'C'}"><span class="badge bg-label-primary me-1">완료</span></td>
+                  <td th:if="${list.status eq 'I'}"><span class="badge bg-label-warning me-1">진행중</span></td>
+                  <td th:if="${list.status eq 'W'}"><span class="badge bg-label-danger me-1">준비</span></td>
+                  <td>
+                    <a th:href="@{./detail(id=${list.id})}"><strong th:text="${list.title}"></strong></a>
+                  </td>
+                  <td th:text="${list.place}"></td>
+                  <td th:if="${list.useYn eq 'Y'}"><span class="badge bg-label-primary me-1">사용중</span></td>
+                  <td th:unless="${list.useYn eq 'Y'}"><span class="badge bg-label-danger me-1">미사용</span></td>
+                  <td th:text="${list.createdDate}"></td>
+                </tr>
+              </th:block>
+              <th:block th:unless="${#lists.size(resultMap.list)}">
+                <tr align="center">
+                  <td colspan="5" rowspan="8">검색 결과가 없습니다.</td>
+                </tr>
+              </th:block>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <div class="demo-inline-spacing">
+                <nav aria-label="Page navigation">
+                  <ul class="pagination" id="pagination">
+                    <li class="page-item first" id="pageItemFirst">
+                      <button class="page-link"
+                        th:data-page="0"
+                        th:data-pageSize="${resultMap.pageSize}"
+                        onclick="fnPageMove(this)">
+                        <i class="tf-icon bx bx-chevrons-left"></i>
+                      </button>
+                    </li>
+                    <li class="page-item"
+                      th:each="index : ${#numbers.sequence(resultMap.startPage, resultMap.endPage)}"
+                      th:classappend="${index == resultMap.currentPage} ? active">
+                      <button class="page-link" id="pageLink" th:text="${index}"
+                       th:data-page="${resultMap.pageSize * (index - 1)}"
+                       th:data-pageSize="${resultMap.pageSize}"
+                       onclick="fnPageMove(this)"></button>
+                    </li>
+                    <li class="page-item last" th:if="${(resultMap.totalCnt - resultMap.pageSize) >= resultMap.pageSize}">
+                      <button class="page-link"
+                        th:data-page="${resultMap.totalCnt - resultMap.pageSize}"
+                        th:data-pageSize="${resultMap.pageSize}"
+                        onclick="fnPageMove(this)">
+                        <i class="tf-icon bx bx-chevrons-right"></i>
+                      </button>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const form = document.getElementById("formInquiryList");
+      const fnSearch = function() {
+        const formData = new FormData(form);
+        const urlSearchParams = new URLSearchParams();
+
+        for (const pair of formData.entries())
+          urlSearchParams.append(pair[0], pair[1]);
+
+        const urlParameters = urlSearchParams.toString();
+        const url = `./list-search?${urlParameters}`;
+        get(url, 'application/json', '', '[[${_csrf.token}]]', function(r) {
+          const tBody = document.getElementById('tBody');
+          tBody.innerHTML = '';
+          let html = '';
+          if (r.resultMap.list.length > 0) {
+            const resultMap = r.resultMap;
+            resultMap.list.forEach((item, index) => {
+              html += '<tr>';
+              html += '<td>'+((resultMap.totalCnt - index) - (resultMap.pageSize * (resultMap.page / resultMap.pageSize)))+'</td>';
+              html += '<td>';
+              html += '<a href="./detail?id='+item.id+'"><strong>'+item.title+'</strong></a>';
+              html += '</td>';
+              html += '<td>'+item.place+'</td>';
+
+              if (item.status == 'C')
+                html += '<td><span class="badge bg-label-primary me-1">완료</span></td>';
+              else if (item.status == 'I')
+                html += '<td><span class="badge bg-label-warning me-1">진행중</span></td>';
+              else
+                html += '<td><span class="badge bg-label-danger me-1">준비</span></td>';
+
+              if (item.useYn == 'Y')
+                html += '<td><span class="badge bg-label-primary me-1">사용중</span></td>';
+              else
+                html += '<td><span class="badge bg-label-danger me-1">미사용</span></td>';
+
+              html += '<td>'+item.createdDate+'</td>';
+              html += '</tr>';
+            });
+
+            tBody.innerHTML = html;
+            fnPageItemHtml(resultMap);
+           } else {
+            html += '<tr align="center">';
+            html += '<td colspan="5" rowspan="8">검색 결과가 없습니다.</td>';
+            html += '</tr>';
+            tBody.innerHTML = html;
+           }
+        });
+      }
+    </script>
+  </th:block>
+</html>
