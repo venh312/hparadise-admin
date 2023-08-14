@@ -11,12 +11,12 @@
   layout:decorate="~{layout/default_layout}">
   <th:block layout:fragment="content">
     <div class="container-xxl flex-grow-1 container-p-y">
-      <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">고객 문의 /</span> 목록</h4>
+      <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">프로그램 /</span> 목록</h4>
       <div class="col-xxl">
         <div class="card mb-4">
           <div class="card-header d-flex align-items-center justify-content-between">
             <h5 class="mb-0">검색</h5>
-            <small class="text-muted float-end">고객 문의 목록 검색</small>
+            <small class="text-muted float-end">프로그램 목록 검색</small>
           </div>
           <div class="card-body">
             <form id="formInquiryList" onsubmit="return false;">
@@ -80,11 +80,12 @@
         <div class="table-responsive text-nowrap" style="height:400px;">
           <table class="table table-striped">
             <thead>
-              <tr>
+              <tr align="center">
                 <th width="10%">번호</th>
-                <th width="20%">이름</th>
-                <th width="30%">이메일</th>
-                <th width="10%">답변 상태</th>
+                <th width="10%">상태</th>
+                <th width="40%">프로그램명</th>
+                <th width="15%">장소</th>
+                <th width="10%">사용 유무</th>
                 <th width="15%">등록 일시</th>
               </tr>
             </thead>
@@ -92,13 +93,15 @@
               <th:block th:if="${#lists.size(resultMap.list)}">
                 <tr th:each="list,status: ${resultMap.list}">
                   <td th:text="${(resultMap.totalCnt - status.index) - (resultMap.pageSize * (resultMap.page / resultMap.pageSize))}">1</td>
-                  <td th:text="${list.name}"></td>
+                  <td th:if="${list.status eq 'C'}"><span class="badge bg-label-primary me-1">완료</span></td>
+                  <td th:if="${list.status eq 'I'}"><span class="badge bg-label-warning me-1">진행중</span></td>
+                  <td th:if="${list.status eq 'W'}"><span class="badge bg-label-danger me-1">준비</span></td>
                   <td>
-                    <a th:href="@{./detail(id=${list.id})}"><strong th:text="${list.email}"></strong></a>
+                    <a th:href="@{./detail(id=${list.id})}"><strong th:text="${list.title}"></strong></a>
                   </td>
-                  <td th:if="${list.answerStatus eq 'C'}"><span class="badge bg-label-primary me-1">완료</span></td>
-                  <td th:if="${list.answerStatus eq 'H'}"><span class="badge bg-label-warning me-1">보류</span></td>
-                  <td th:if="${list.answerStatus eq 'W'}"><span class="badge bg-label-danger me-1">대기</span></td>
+                  <td th:text="${list.place}"></td>
+                  <td th:if="${list.useYn eq 'Y'}"><span class="badge bg-label-primary me-1">사용중</span></td>
+                  <td th:unless="${list.useYn eq 'Y'}"><span class="badge bg-label-danger me-1">미사용</span></td>
                   <td th:text="${list.createdDate}"></td>
                 </tr>
               </th:block>
@@ -168,17 +171,22 @@
             resultMap.list.forEach((item, index) => {
               html += '<tr>';
               html += '<td>'+((resultMap.totalCnt - index) - (resultMap.pageSize * (resultMap.page / resultMap.pageSize)))+'</td>';
-              html += '<td>'+item.name+'</td>';
               html += '<td>';
-              html += '<a href="./detail?id='+item.id+'"><strong>'+item.email+'</strong></a>';
+              html += '<a href="./detail?id='+item.id+'"><strong>'+item.title+'</strong></a>';
               html += '</td>';
+              html += '<td>'+item.place+'</td>';
 
-              if (item.answerStatus == 'C')
+              if (item.status == 'C')
                 html += '<td><span class="badge bg-label-primary me-1">완료</span></td>';
-              else if (item.answerStatus == 'H')
-                html += '<td><span class="badge bg-label-warning me-1">보류</span></td>';
+              else if (item.status == 'I')
+                html += '<td><span class="badge bg-label-warning me-1">진행중</span></td>';
               else
-                html += '<td><span class="badge bg-label-danger me-1">대기</span></td>';
+                html += '<td><span class="badge bg-label-danger me-1">준비</span></td>';
+
+              if (item.useYn == 'Y')
+                html += '<td><span class="badge bg-label-primary me-1">사용중</span></td>';
+              else
+                html += '<td><span class="badge bg-label-danger me-1">미사용</span></td>';
 
               html += '<td>'+item.createdDate+'</td>';
               html += '</tr>';
