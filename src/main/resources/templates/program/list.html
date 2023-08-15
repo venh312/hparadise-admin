@@ -44,8 +44,8 @@
                   <label for="target" class="form-label">조건</label>
                   <select id="target" name="target" class="form-select">
                     <option value="ALL">전체</option>
-                    <option value="name">이름</option>
-                    <option value="email">이메일</option>
+                    <option value="name">프로그램</option>
+                    <option value="email">장소</option>
                   </select>
                 </div>
                 <div class="col-sm-3">
@@ -53,23 +53,36 @@
                   <input type="text" class="form-control" id="search" name="search">
                 </div>
                 <div class="col-sm-1">
-                  <label for="answerStatus" class="form-label">답변 상태</label>
-                  <select id="answerStatus" name="answerStatus" class="form-select sm-1">
+                  <label for="status" class="form-label">상태</label>
+                  <select id="status" name="status" class="form-select sm-1">
                     <option value="">전체</option>
+                    <option value="W">준비</option>
+                    <option value="I">진행중</option>
                     <option value="C">완료</option>
-                    <option value="H">보류</option>
-                    <option value="W">대기</option>
+                  </select>
+                </div>
+                <div class="col-sm-1">
+                  <label for="useYn" class="form-label">사용 유무</label>
+                  <select id="useYn" name="useYn" class="form-select sm-1">
+                    <option value="">전체</option>
+                    <option value="Y">사용중</option>
+                    <option value="N">미사용</option>
                   </select>
                 </div>
               </div>
               <div class="row">
-                <div class="col-sm-10">
+                <div class="col-sm-6">
                   <button type="button" class="btn btn-primary" onclick="fnSearch()">
                     <span class="tf-icons bx bx-search"></span>&nbsp; 검색
                   </button>
                   <button type="button" class="btn btn-secondary" onclick="javascript:location.href='./list'">
                     <span class="tf-icons bx bx-reset"></span>&nbsp; 새로고침
                   </button>
+                </div>
+                <div class="col-sm-6">
+                  <a class="btn btn-warning" href="./detail">
+                    <span class="tf-icons bx bx-pencil"></span>&nbsp; 등록
+                  </a>
                 </div>
               </div>
             </form>

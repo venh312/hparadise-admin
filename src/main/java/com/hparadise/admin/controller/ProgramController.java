@@ -33,7 +33,9 @@ public class ProgramController {
 
     @GetMapping("/detail")
     public String programDetailPage(Model model, ProgramSearchRequest request) {
-        model.addAttribute("info", programService.findById(request.getId()));
+        if (request.getId() != null) {
+            model.addAttribute("info", programService.findById(request.getId()));
+        }
         return "program/detail";
     }
 }
