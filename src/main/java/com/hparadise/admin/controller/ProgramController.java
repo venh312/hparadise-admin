@@ -1,5 +1,6 @@
 package com.hparadise.admin.controller;
 
+import com.hparadise.admin.dto.program.ProgramSaveRequest;
 import com.hparadise.admin.dto.program.ProgramSearchRequest;
 import com.hparadise.admin.service.ProgramService;
 import lombok.RequiredArgsConstructor;
@@ -37,5 +38,17 @@ public class ProgramController {
             model.addAttribute("info", programService.findById(request.getId()));
         }
         return "program/detail";
+    }
+
+    @PostMapping("/save")
+    public String programSave(Model model, @RequestBody ProgramSaveRequest request) {
+        long result = 0;
+        try {
+            result = programService.save(request);
+        } catch (Exception e) {
+            log.info("[Exception] : {} ", e.getMessage());
+        }
+        model.addAttribute("result", result);
+        return "jsonView";
     }
 }

@@ -4,6 +4,7 @@ import com.hparadise.admin.domain.program.ProgramRepository;
 import com.hparadise.admin.domain.program.QProgram;
 import com.hparadise.admin.dto.program.ProgramExpression;
 import com.hparadise.admin.dto.program.ProgramInfoResponse;
+import com.hparadise.admin.dto.program.ProgramSaveRequest;
 import com.hparadise.admin.dto.program.ProgramSearchRequest;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -75,5 +76,10 @@ public class ProgramService {
     @Transactional(readOnly = true)
     public ProgramInfoResponse findById(Long id) {
         return new ProgramInfoResponse(programRepository.findById(id).get());
+    }
+
+    @Transactional
+    public long save(ProgramSaveRequest request) {
+        return programRepository.save(request.toEntity()).getId();
     }
 }

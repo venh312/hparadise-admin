@@ -18,50 +18,63 @@
         <div class="col-md-12">
           <div class="card mb-4">
             <div class="card-body">
-              <div class="row">
-                <div class="row mb-3">
-                  <div class="col-md-3">
-                    <label for="startDate" class="form-label">시작 일시</label>
-                    <input class="form-control" type="datetime-local" id="startDate" name="startDate" onchange="changeDate(this)">
+              <form id="formProgramDetail" class="mb-3">
+                <div class="row">
+                  <div class="row mb-3">
+                    <div class="col-md-3">
+                      <label for="startDate" class="form-label">시작 일시</label>
+                      <input class="form-control" type="datetime-local" id="startDate" name="startDate" required>
+                    </div>
+                    <div class="col-md-3">
+                      <label for="endDate" class="form-label">종료 일시</label>
+                      <input class="form-control" type="datetime-local" id="endDate" name="endDate" required>
+                    </div>
                   </div>
-                  <div class="col-md-3">
-                    <label for="endDate" class="form-label">종료 일시</label>
-                    <input class="form-control" type="datetime-local" id="endDate" name="endDate" onchange="changeDate(this)">
+                  <div class="mb-3">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="title" name="title" placeholder="프로그램명을 입력해주세요." required>
+                      <label for="title">프로그램명</label>
+  <!--                    <div id="floatingInputHelp" class="form-text">-->
+  <!--                      We'll never share your details with anyone else.-->
+  <!--                    </div>-->
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="status" class="form-label">내용</label>
+                    <div class="input-group input-group-merge">
+                      <span class="input-group-text"><i class="bx bx-comment"></i></span>
+                      <textarea class="form-control" rows="10" id="contents" name="contents" required></textarea>
+                    </div>
+                  </div>
+                  <div class="mb-3 col-md-6">
+                    <label for="place" class="form-label">장소</label>
+                    <div class="input-group input-group-merge">
+                      <span class="input-group-text"><i class="bx bx-buildings"></i></span>
+                      <input type="text" class="form-control" id="place" name="place" placeholder="공간 교육실" required>
+                    </div>
+                  </div>
+                  <div class="mb-3 col-md-6">
+                    <label for="status" class="form-label">상태</label>
+                    <select id="status" name="status" class="form-select sm-1">
+                      <option value="W">준비</option>
+                      <option value="I">진행중</option>
+                      <option value="C">완료</option>
+                    </select>
+                  </div>
+                  <div class="mb-3 col-md-6">
+                    <label for="status" class="form-label">사용 유무</label>
+                    <div class="form-check form-switch mb-2">
+                      <input class="form-check-input" type="checkbox" id="useYn" name="useYn" value="Y">
+                      <label class="form-check-label" for="useYn">프로그램 사용 유무를 지정해주세요.</label>
+                    </div>
                   </div>
                 </div>
-                <div class="mb-3">
-                  <div class="form-floating">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="프로그램명을 입력해주세요.">
-                    <label for="floatingInput">프로그램명</label>
-<!--                    <div id="floatingInputHelp" class="form-text">-->
-<!--                      We'll never share your details with anyone else.-->
-<!--                    </div>-->
-                  </div>
+                <div class="col-sm-6">
+                  <button class="btn btn-primary" type="submit">
+                    <span class="tf-icons bx bx-pencil"></span>&nbsp; 등록
+                  </button>
                 </div>
-                <div class="mb-3">
-                  <label for="status" class="form-label">내용</label>
-                  <textarea class="form-control" id="contents" name="contents" rows="8" placeholder="프로그램 교육 내용을 입력해주세요."></textarea>
-                </div>
-                <div class="mb-3 col-md-6">
-                  <label for="place" class="form-label">장소</label>
-                  <input type="text" class="form-control" id="place" name="place" placeholder="공간 교육실">
-                </div>
-                <div class="mb-3 col-md-6">
-                  <label for="status" class="form-label">상태</label>
-                  <select id="status" name="status" class="form-select sm-1">
-                    <option value="W">준비</option>
-                    <option value="I">진행중</option>
-                    <option value="C">완료</option>
-                  </select>
-                </div>
-                <div class="mb-3 col-md-6">
-                  <label for="status" class="form-label">사용 유무</label>
-                  <div class="form-check form-switch mb-2">
-                    <input class="form-check-input" type="checkbox" id="useYn" name="useYn">
-                    <label class="form-check-label" for="useYn">프로그램 사용 유무를 지정해주세요.</label>
-                  </div>
-                </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
@@ -72,6 +85,19 @@
     </th:block>
   </div>
   <script>
+    const form = document.getElementById("formProgramDetail");
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const data = JSON.stringify(Object.fromEntries(formData));
+      post('/program/save', 'application/json', data, '[[${_csrf.token}]]', function(r) {
+        if (r.result > 0) {
+          alert(msg.register);
+          return;
+        }
+        alert(msg.error);
+      });
+    });
   </script>
 </th:block>
 </html>
