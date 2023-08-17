@@ -80,7 +80,7 @@
         <div class="table-responsive text-nowrap" style="height:400px;">
           <table class="table table-striped">
             <thead>
-              <tr>
+              <tr align="center">
                 <th width="10%">번호</th>
                 <th width="20%">이름</th>
                 <th width="30%">이메일</th>
@@ -91,7 +91,7 @@
             </thead>
             <tbody class="table-border-bottom-0" id="tBody">
               <th:block th:if="${#lists.size(resultMap.list)}">
-                <tr th:each="list,status: ${resultMap.list}">
+                <tr align="center" th:each="list,status: ${resultMap.list}">
                   <td th:text="${(resultMap.totalCnt - status.index) - (resultMap.pageSize * (resultMap.page / resultMap.pageSize))}">1</td>
                   <td th:text="${list.name}"></td>
                   <td>
@@ -167,7 +167,7 @@
           if (r.resultMap.list.length > 0) {
             const resultMap = r.resultMap;
             resultMap.list.forEach((item, index) => {
-              html += '<tr>';
+              html += '<tr align="center">';
               html += '<td>'+((resultMap.totalCnt - index) - (resultMap.pageSize * (resultMap.page / resultMap.pageSize)))+'</td>';
               html += '<td>'+item.name+'</td>';
               html += '<td>';
