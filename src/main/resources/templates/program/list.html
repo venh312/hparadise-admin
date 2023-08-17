@@ -19,7 +19,7 @@
             <small class="text-muted float-end">프로그램 목록 검색</small>
           </div>
           <div class="card-body">
-            <form id="formInquiryList" onsubmit="return false;">
+            <form id="formProgramList" onsubmit="return false;">
               <input type="hidden" id="page" name="page" value="0"/>
               <input type="hidden" id="pageSize" name="pageSize" value="8"/>
               <div class="row mb-3">
@@ -104,7 +104,7 @@
             </thead>
             <tbody class="table-border-bottom-0" id="tBody">
               <th:block th:if="${#lists.size(resultMap.list)}">
-                <tr th:each="list,status: ${resultMap.list}">
+                <tr align="center" th:each="list,status: ${resultMap.list}">
                   <td th:text="${(resultMap.totalCnt - status.index) - (resultMap.pageSize * (resultMap.page / resultMap.pageSize))}">1</td>
                   <td th:if="${list.status eq 'C'}"><span class="badge bg-label-primary me-1">완료</span></td>
                   <td th:if="${list.status eq 'I'}"><span class="badge bg-label-warning me-1">진행중</span></td>
@@ -165,7 +165,7 @@
       </div>
     </div>
     <script>
-      const form = document.getElementById("formInquiryList");
+      const form = document.getElementById("formProgramList");
       const fnSearch = function() {
         const formData = new FormData(form);
         const urlSearchParams = new URLSearchParams();
@@ -182,7 +182,7 @@
           if (r.resultMap.list.length > 0) {
             const resultMap = r.resultMap;
             resultMap.list.forEach((item, index) => {
-              html += '<tr>';
+              html += '<tr align="center">';
               html += '<td>'+((resultMap.totalCnt - index) - (resultMap.pageSize * (resultMap.page / resultMap.pageSize)))+'</td>';
               html += '<td>';
               html += '<a href="./detail?id='+item.id+'"><strong>'+item.title+'</strong></a>';
