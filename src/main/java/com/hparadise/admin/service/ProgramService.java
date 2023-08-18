@@ -11,6 +11,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
@@ -81,5 +83,20 @@ public class ProgramService {
     @Transactional
     public long save(ProgramSaveRequest request) {
         return programRepository.save(request.toEntity()).getId();
+    }
+
+    @Transactional
+    public long update(ProgramSaveRequest request) {
+        return jpaQueryFactory.update(program)
+            .set(program.startDate, request.getStartDate())
+            .set(program.endDate, request.getEndDate())
+            .set(program.title, request.getTitle())
+            .set(program.contents, request.getContents())
+            .set(program.place, request.getPlace())
+            .set(program.status, request.getStatus())
+            .set(program.useYn, request.getUseYn())
+            .set(program.modifiedDate, LocalDateTime.now())
+            .where(program.id.eq(request.getId()))
+            .execute();
     }
 }

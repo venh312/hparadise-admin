@@ -159,7 +159,7 @@
 
         const urlParameters = urlSearchParams.toString();
         const url = `./list-search?${urlParameters}`;
-        get(url, 'application/json', '', '[[${_csrf.token}]]', function(r) {
+        send('GET', url, 'application/json', '', '[[${_csrf.token}]]', function(r) {
           const tBody = document.getElementById('tBody');
           tBody.innerHTML = '';
           let html = '';

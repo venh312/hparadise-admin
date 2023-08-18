@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class ProgramSaveRequest {
+    private Long id;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private String title;

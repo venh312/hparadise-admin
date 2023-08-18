@@ -68,8 +68,23 @@
                       <label class="form-check-label" for="useYn">프로그램 사용 유무를 지정해주세요.</label>
                     </div>
                   </div>
+                  <div class="mb-3 col-md-6">
+                    <label for="status" class="form-label">사용 유무</label>
+                    <div class="form-check form-switch mb-2">
+                      <input class="form-check-input" type="checkbox" id="useYn" name="useYn" value="Y">
+                      <label class="form-check-label" for="useYn">프로그램 사용 유무를 지정해주세요.</label>
+                    </div>
+                  </div>
                 </div>
                 <div class="col-sm-6">
+                  <button class="btn btn-primary" type="submit">
+                    <span class="tf-icons bx bx-pencil"></span>&nbsp; 등록
+                  </button>
+                </div>
+                <div class="col-sm-6">
+                  <a class="btn btn-dark" href="./list">
+                    <span class="tf-icons bx bx-list-ol"></span>&nbsp; 목록
+                  </a>
                   <button class="btn btn-primary" type="submit">
                     <span class="tf-icons bx bx-pencil"></span>&nbsp; 등록
                   </button>
@@ -81,16 +96,83 @@
       </div>
     </th:block>
     <th:block th:unless="${#strings.isEmpty(info)}">
-
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card mb-4">
+            <div class="card-body">
+              <form id="formProgramDetail" class="mb-3">
+                <input type="hidden" id="id" name="id" th:value="${info.id}">
+                <div class="row">
+                  <div class="row mb-3">
+                    <div class="col-md-3">
+                      <label for="startDate" class="form-label">시작 일시</label>
+                      <input class="form-control" type="datetime-local" id="startDate" name="startDate" th:value="${info.startDate}" required>
+                    </div>
+                    <div class="col-md-3">
+                      <label for="endDate" class="form-label">종료 일시</label>
+                      <input class="form-control" type="datetime-local" id="endDate" name="endDate" th:value="${info.endDate}" required>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="title" name="title" placeholder="프로그램명을 입력해주세요." th:value="${info.title }" required>
+                      <label for="title">프로그램명</label>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="status" class="form-label">내용</label>
+                    <div class="input-group input-group-merge">
+                      <span class="input-group-text"><i class="bx bx-comment"></i></span>
+                      <textarea class="form-control" rows="10" id="contents" name="contents" th:text="${info.contents}" required></textarea>
+                    </div>
+                  </div>
+                  <div class="mb-3 col-md-6">
+                    <label for="place" class="form-label">장소</label>
+                    <div class="input-group input-group-merge">
+                      <span class="input-group-text"><i class="bx bx-buildings"></i></span>
+                      <input type="text" class="form-control" id="place" name="place" placeholder="공간 교육실" th:value=${info.place} required>
+                    </div>
+                  </div>
+                  <div class="mb-3 col-md-6">
+                    <label for="status" class="form-label">상태</label>
+                    <select id="status" name="status" class="form-select sm-1">
+                      <option value="W" th:selected="${info.status eq 'W'}">준비</option>
+                      <option value="I" th:selected="${info.status eq 'I'}">진행중</option>
+                      <option value="C" th:selected="${info.status eq 'C'}">완료</option>
+                    </select>
+                  </div>
+                  <div class="mb-3 col-md-6">
+                    <label for="status" class="form-label">사용 유무</label>
+                    <div class="form-check form-switch mb-2">
+                      <input class="form-check-input" type="checkbox" id="useYn" name="useYn" value="Y" th:checked="${info.useYn eq 'Y'}">
+                      <label class="form-check-label" for="useYn">프로그램 사용 유무를 지정해주세요.</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <a class="btn btn-dark" href="./list">
+                    <span class="tf-icons bx bx-list-ol"></span>&nbsp; 목록
+                  </a>
+                  <button class="btn btn-primary" type="submit">
+                    <span class="tf-icons bx bx-pencil"></span>&nbsp; 수정
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </th:block>
   </div>
-  <script>
+  <script th:inline="javascript">
     const form = document.getElementById("formProgramDetail");
     form.addEventListener("submit", function(e) {
       e.preventDefault();
       const formData = new FormData(form);
       const data = JSON.stringify(Object.fromEntries(formData));
-      post('/program/save', 'application/json', data, '[[${_csrf.token}]]', function(r) {
+      let method = 'POST';
+      if ([[${info}]]) method = 'PUT';
+      send(method, '/program/detail', 'application/json', data, [[${_csrf.token}]], function(r) {
         if (r.result > 0) {
           alert(msg.register);
           return;

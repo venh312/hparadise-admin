@@ -123,7 +123,7 @@
         id: '[[${info.id}]]',
         role: role.value,
       };
-      put('/member/role', 'application/json', JSON.stringify(data), '[[${_csrf.token}]]', function(r) {
+      send('PUT', '/member/role', 'application/json', JSON.stringify(data), '[[${_csrf.token}]]', function(r) {
       });
     }
   </script>
