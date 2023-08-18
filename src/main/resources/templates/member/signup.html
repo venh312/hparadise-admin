@@ -159,12 +159,12 @@
         e.preventDefault();
         const formData = new FormData(form);
         const data = JSON.stringify(Object.fromEntries(formData));
-        post('/member/public/count-email', 'application/json', data, '[[${_csrf.token}]]', function(r) {
+        send('POST', '/member/public/count-email', 'application/json', data, '[[${_csrf.token}]]', function(r) {
           if (r.result > 0) {
             alert(msg.member.email.already);
             return;
           }
-          post('/member/public/save', 'application/json', data, '[[${_csrf.token}]]', function(r) {
+          send('POST', '/member/public/save', 'application/json', data, '[[${_csrf.token}]]', function(r) {
             if (r.result > 0) {
               alert(msg.register);
               location.href = url.member.signin;

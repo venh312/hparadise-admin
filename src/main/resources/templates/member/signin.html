@@ -168,7 +168,7 @@
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         const data = new FormData(form);
-        post('/member/public/login', '', data, '[[${_csrf.token}]]', function(r) {
+        send('POST', '/member/public/login', '', data, '[[${_csrf.token}]]', function(r) {
           switch (r.status) {
             case 600:
               location.href = url.dashboard;

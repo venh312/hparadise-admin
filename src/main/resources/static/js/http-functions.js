@@ -1,4 +1,4 @@
-const base = function(url, method, contentType, data, xsrfToken, callback) {
+const send = function(method, url, contentType, data, xsrfToken, callback) {
   loadingDisplay('');
 
   const headers = new Headers();
@@ -29,20 +29,4 @@ const base = function(url, method, contentType, data, xsrfToken, callback) {
     callback(data);
   })
   .catch(error => console.error(error));
-}
-
-const get = function(url, contentType, data, xsrfToken, callback) {
-  base(url, 'GET', contentType, '', xsrfToken, callback);
-}
-
-const post = function(url, contentType, data, xsrfToken, callback) {
-  base(url, 'POST', contentType, data, xsrfToken, callback);
-}
-
-const put = function(url, contentType, data, xsrfToken, callback) {
-  base(url, 'PUT', contentType, data, xsrfToken, callback);
-}
-
-const del = function(url, contentType, data, xsrfToken, callback) {
-  base(url, 'DELETE', contentType, data, xsrfToken, callback);
 }

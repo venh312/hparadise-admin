@@ -138,7 +138,7 @@
         const form = document.getElementById("formAnswer");
         const formData = new FormData(form);
         const data = JSON.stringify(Object.fromEntries(formData));
-        post('/inquiry/answer', 'application/json', data, '[[${_csrf.token}]]', function(r) {
+        send('POST', '/inquiry/answer', 'application/json', data, '[[${_csrf.token}]]', function(r) {
           if (r.result > 0) {
             alert(msg.register);
             location.reload();
