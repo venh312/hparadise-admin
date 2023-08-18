@@ -34,17 +34,28 @@ public class ProgramController {
 
     @GetMapping("/detail")
     public String programDetailPage(Model model, ProgramSearchRequest request) {
-        if (request.getId() != null) {
+        if (request.getId() != null)
             model.addAttribute("info", programService.findById(request.getId()));
-        }
         return "program/detail";
     }
 
-    @PostMapping("/save")
+    @PostMapping("/detail")
     public String programSave(Model model, @RequestBody ProgramSaveRequest request) {
         long result = 0;
         try {
             result = programService.save(request);
+        } catch (Exception e) {
+            log.info("[Exception] : {} ", e.getMessage());
+        }
+        model.addAttribute("result", result);
+        return "jsonView";
+    }
+
+    @PutMapping("/detail")
+    public String programUpdate(Model model, @RequestBody ProgramSaveRequest request) {
+        long result = 0;
+        try {
+            result = programService.update(request);
         } catch (Exception e) {
             log.info("[Exception] : {} ", e.getMessage());
         }
