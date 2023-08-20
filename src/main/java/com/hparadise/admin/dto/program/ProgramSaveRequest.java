@@ -1,6 +1,7 @@
 package com.hparadise.admin.dto.program;
 
 import com.hparadise.admin.domain.program.Program;
+import com.hparadise.admin.util.MemberUtils;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -26,10 +27,9 @@ public class ProgramSaveRequest {
             .contents(getContents())
             .place(getPlace())
             .status(getStatus())
-            .useYn(getUseYn())
+            .useYn(getUseYn() == null ? "N" : getUseYn())
             .teacherId(getTeacherId())
-            .createdId(getCreatedId())
+            .createdId(MemberUtils.getId())
             .build();
     }
-
 }

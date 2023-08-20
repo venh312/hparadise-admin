@@ -65,6 +65,15 @@ const fnTrAllChk = function() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+  const birth = document.getElementById('birth');
+  birth.addEventListener('input', () => {
+    let value = birth.value.replace(/\D/g, ''); // 숫자 이외의 문자 제거
+    if (value.length > 8) value = value.slice(0, 8); // 최대 길이를 8자로 제한
+    if (value.length >= 4 && value.length < 6) value = `${value.slice(0, 4)}-${value.slice(4)}`;
+    else if (value.length >= 6) value = `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6)}`;
+    birth.value = value;
+  });
+
   // [lnb] Current page add class active
   const lnbMenu = document.querySelectorAll('.menu-item');
   lnbMenu.forEach(element => {
