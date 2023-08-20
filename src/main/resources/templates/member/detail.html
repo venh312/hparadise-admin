@@ -38,16 +38,13 @@
               <hr>
               <div class="row">
                 <div class="mb-3 col-md-6">
-                  <label for="organization" class="form-label">이름</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="organization"
-                    name="organization"
-                    th:value="${info.name}"
-                    readonly
-                  />
+                  <label class="form-label">상태</label>
+                  <div class="demo-inline-spacing">
+                    <span class="badge bg-primary" th:if="${info.useYn eq 'Y'}">Primary</span>
+                    <span class="badge bg-danger" th:unless="${info.useYn eq 'Y'}">Danger</span>
+                  </div>
                 </div>
+                <div class="mb-3 col-md-6"></div>
                 <div class="mb-3 col-md-6">
                   <label for="email" class="form-label">이메일</label>
                   <input
@@ -61,16 +58,6 @@
                   />
                 </div>
                 <div class="mb-3 col-md-6">
-                </div>
-                <div class="mb-3 col-md-6"></div>
-                <div class="mb-3 col-md-6">
-                  <label class="form-label">상태</label>
-                  <div class="demo-inline-spacing">
-                    <span class="badge bg-primary" th:if="${info.useYn eq 'Y'}">Primary</span>
-                    <span class="badge bg-danger" th:unless="${info.useYn eq 'Y'}">Danger</span>
-                  </div>
-                </div>
-                <div class="mb-3 col-md-6">
                   <label class="form-label" for="role">역할</label>
                   <select class="select2 form-select" id="role" name="role" onchange="changeRole()">
                     <option value="BASIC" th:selected="${info.role eq 'BASIC'}">일반</option>
@@ -78,6 +65,24 @@
                     <option value="HOUSE" th:selected="${info.role eq 'HOUSE'}">시설관리</option>
                     <option value="ADMIN" th:selected="${info.role eq 'ADMIN'}">관리자</option>
                   </select>
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label class="form-label">이름</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    th:value="${info.name}"
+                    readonly
+                  />
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label class="form-label">생년월일</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    th:value="${info.birth}"
+                    readonly
+                  />
                 </div>
                 <div class="mb-3 col-md-6">
                   <label class="form-label">로그인 일시</label>
