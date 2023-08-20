@@ -78,11 +78,12 @@
                   <button type="button" class="btn btn-secondary" onclick="javascript:location.href='./list'">
                     <span class="tf-icons bx bx-reset"></span>&nbsp; 새로고침
                   </button>
-                </div>
-                <div class="col-sm-6">
                   <a class="btn btn-warning" href="./detail">
                     <span class="tf-icons bx bx-pencil"></span>&nbsp; 등록
                   </a>
+                  <button type="button" class="btn btn-danger" onclick="fnDelete()">
+                    <span class="tf-icons bx bx-eraser"></span>&nbsp; 삭제
+                  </button>
                 </div>
               </div>
             </form>
@@ -94,10 +95,13 @@
           <table class="table table-striped">
             <thead>
               <tr align="center">
-                <th width="10%">번호</th>
+                <th width="10%">
+                  <input class="form-check-input" type="checkbox" onclick="fnTrAllChk()">
+                </th>
+                <th width="5%">번호</th>
                 <th width="10%">상태</th>
                 <th width="40%">프로그램명</th>
-                <th width="15%">장소</th>
+                <th width="20%">장소</th>
                 <th width="10%">사용 유무</th>
                 <th width="15%">등록 일시</th>
               </tr>
@@ -105,6 +109,9 @@
             <tbody class="table-border-bottom-0" id="tBody">
               <th:block th:if="${#lists.size(resultMap.list)}">
                 <tr align="center" th:each="list,status: ${resultMap.list}">
+                  <td>
+                    <input class="form-check-input" type="checkbox" name="trChk" th:value="${list.id}">
+                  </td>
                   <td th:text="${(resultMap.totalCnt - status.index) - (resultMap.pageSize * (resultMap.page / resultMap.pageSize))}">1</td>
                   <td th:if="${list.status eq 'C'}"><span class="badge bg-label-primary me-1">완료</span></td>
                   <td th:if="${list.status eq 'I'}"><span class="badge bg-label-warning me-1">진행중</span></td>
@@ -120,7 +127,7 @@
               </th:block>
               <th:block th:unless="${#lists.size(resultMap.list)}">
                 <tr align="center">
-                  <td colspan="5" rowspan="8">검색 결과가 없습니다.</td>
+                  <td colspan="8" rowspan="8">검색 결과가 없습니다.</td>
                 </tr>
               </th:block>
             </tbody>
@@ -148,7 +155,7 @@
                        th:data-pageSize="${resultMap.pageSize}"
                        onclick="fnPageMove(this)"></button>
                     </li>
-                    <li class="page-item last" th:if="${(resultMap.totalCnt - resultMap.pageSize) >= resultMap.pageSize}">
+                    <li class="page-item center" th:if="${(resultMap.totalCnt - resultMap.pageSize) >= resultMap.pageSize}">
                       <button class="page-link"
                         th:data-page="${resultMap.totalCnt - resultMap.pageSize}"
                         th:data-pageSize="${resultMap.pageSize}"
@@ -183,11 +190,10 @@
             const resultMap = r.resultMap;
             resultMap.list.forEach((item, index) => {
               html += '<tr align="center">';
-              html += '<td>'+((resultMap.totalCnt - index) - (resultMap.pageSize * (resultMap.page / resultMap.pageSize)))+'</td>';
               html += '<td>';
-              html += '<a href="./detail?id='+item.id+'"><strong>'+item.title+'</strong></a>';
+              html += '<input class="form-check-input" type="checkbox" name="trChk" value="'+item.id+'">';
               html += '</td>';
-              html += '<td>'+item.place+'</td>';
+              html += '<td>'+((resultMap.totalCnt - index) - (resultMap.pageSize * (resultMap.page / resultMap.pageSize)))+'</td>';
 
               if (item.status == 'C')
                 html += '<td><span class="badge bg-label-primary me-1">완료</span></td>';
@@ -195,6 +201,11 @@
                 html += '<td><span class="badge bg-label-warning me-1">진행중</span></td>';
               else
                 html += '<td><span class="badge bg-label-danger me-1">준비</span></td>';
+
+              html += '<td>';
+              html += '<a href="./detail?id='+item.id+'"><strong>'+item.title+'</strong></a>';
+              html += '</td>';
+              html += '<td>'+item.place+'</td>';
 
               if (item.useYn == 'Y')
                 html += '<td><span class="badge bg-label-primary me-1">사용중</span></td>';
@@ -209,11 +220,39 @@
             fnPageItemHtml(resultMap);
            } else {
             html += '<tr align="center">';
-            html += '<td colspan="5" rowspan="8">검색 결과가 없습니다.</td>';
+            html += '<td colspan="8" rowspan="8">검색 결과가 없습니다.</td>';
             html += '</tr>';
             tBody.innerHTML = html;
            }
         });
+      }
+
+      const fnDelete = function() {
+        if (confirm(msg.confirm.delete)) {
+          let arr = [];
+          let checkedCount = 0;
+
+          document.getElementsByName('trChk').forEach(element => {
+            if (element.checked) {
+              arr.push(element.value);
+              checkedCount++;
+            }
+          });
+
+          if (checkedCount == 0) {
+            alert(msg.empty.delete);
+            return;
+          }
+
+          const data = { idArr : arr };
+          send('DELETE', '/program/detail', 'application/json', JSON.stringify(data), '[[${_csrf.token}]]', function(r) {
+            if (r.result > 0) {
+              alert(msg.delete);
+              return;
+            }
+            alert(msg.error);
+          });
+        }
       }
     </script>
   </th:block>
