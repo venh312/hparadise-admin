@@ -21,8 +21,9 @@ public class Member extends BaseTimeEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
     private String email;
+    private String name;
+    private String birth;
     private String password;
     private String prevPassword;
     private String tempPasswordYn;

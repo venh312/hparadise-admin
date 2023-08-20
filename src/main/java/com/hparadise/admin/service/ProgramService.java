@@ -2,10 +2,8 @@ package com.hparadise.admin.service;
 
 import com.hparadise.admin.domain.program.ProgramRepository;
 import com.hparadise.admin.domain.program.QProgram;
-import com.hparadise.admin.dto.program.ProgramExpression;
-import com.hparadise.admin.dto.program.ProgramInfoResponse;
-import com.hparadise.admin.dto.program.ProgramSaveRequest;
-import com.hparadise.admin.dto.program.ProgramSearchRequest;
+import com.hparadise.admin.dto.program.*;
+import com.hparadise.admin.util.MemberUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -95,8 +93,16 @@ public class ProgramService {
             .set(program.place, request.getPlace())
             .set(program.status, request.getStatus())
             .set(program.useYn, request.getUseYn())
+            .set(program.modifiedId, MemberUtils.getId())
             .set(program.modifiedDate, LocalDateTime.now())
             .where(program.id.eq(request.getId()))
+            .execute();
+    }
+
+    @Transactional
+    public long delete(ProgramDeleteRequest request) {
+        return jpaQueryFactory.delete(program)
+            .where(program.id.in(request.getIdArr()))
             .execute();
     }
 }

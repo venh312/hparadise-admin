@@ -105,20 +105,25 @@
               <p class="mb-4">아래 정보를 입력해주세요.!</p>
               <form id="formSignup" class="mb-3">
                 <div class="mb-3">
-                  <label for="name" class="form-label">이름</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="name"
-                    name="name"
-                    placeholder="이름을 입력해주세요."
-                    autofocus
-                    required
-                  />
+                  <label class="form-label">이메일</label>
+                  <div class="input-group input-group-merge">
+                    <span class="input-group-text"><i class="bx bx-envelope"></i></span>
+                    <input type="text" class="form-control" id="email" name="email" placeholder="이메일을 입력해주세요." required />
+                  </div>
                 </div>
                 <div class="mb-3">
-                  <label for="email" class="form-label">이메일</label>
-                  <input type="text" class="form-control" id="email" name="email" placeholder="이메일을 입력해주세요." required />
+                  <label class="form-label">이름</label>
+                  <div class="input-group input-group-merge">
+                    <span class="input-group-text"><i class="bx bx-user"></i></span>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력해주세요." required />
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="email" class="form-label">생년월일</label>
+                  <div class="input-group input-group-merge">
+                    <span class="input-group-text"><i class="bx bx-calendar"></i></span>
+                    <input type="text" class="form-control" id="birth" name="birth" placeholder="생년월일을 입력해주세요." required />
+                  </div>
                 </div>
                 <div class="mb-3 form-password-toggle">
                   <label class="form-label" for="password">비밀번호</label>
@@ -153,6 +158,7 @@
         </div>
       </div>
     </div>
+    <script src="/assets/js/main.js"></script>
     <script>
       const form = document.getElementById("formSignup");
       form.addEventListener("submit", function(e) {

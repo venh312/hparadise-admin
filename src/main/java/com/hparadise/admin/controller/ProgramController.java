@@ -1,5 +1,6 @@
 package com.hparadise.admin.controller;
 
+import com.hparadise.admin.dto.program.ProgramDeleteRequest;
 import com.hparadise.admin.dto.program.ProgramSaveRequest;
 import com.hparadise.admin.dto.program.ProgramSearchRequest;
 import com.hparadise.admin.service.ProgramService;
@@ -56,6 +57,19 @@ public class ProgramController {
         long result = 0;
         try {
             result = programService.update(request);
+        } catch (Exception e) {
+            log.info("[Exception] : {} ", e.getMessage());
+        }
+        model.addAttribute("result", result);
+        return "jsonView";
+    }
+
+
+    @DeleteMapping("/detail")
+    public String programDelete(Model model, @RequestBody ProgramDeleteRequest request) {
+        long result = 0;
+        try {
+            result = programService.delete(request);
         } catch (Exception e) {
             log.info("[Exception] : {} ", e.getMessage());
         }

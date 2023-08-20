@@ -42,7 +42,6 @@
                   <div class="mb-3">
                     <label for="status" class="form-label">내용</label>
                     <div class="input-group input-group-merge">
-                      <span class="input-group-text"><i class="bx bx-comment"></i></span>
                       <textarea class="form-control" rows="10" id="contents" name="contents" required></textarea>
                     </div>
                   </div>
@@ -69,23 +68,19 @@
                     </div>
                   </div>
                   <div class="mb-3 col-md-6">
-                    <label for="status" class="form-label">사용 유무</label>
-                    <div class="form-check form-switch mb-2">
-                      <input class="form-check-input" type="checkbox" id="useYn" name="useYn" value="Y">
-                      <label class="form-check-label" for="useYn">프로그램 사용 유무를 지정해주세요.</label>
+                    <label for="status" class="form-label">교육 참석자</label>
+                    <div class="input">
+                      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#attendeeModal" onclick="fnAttendee()">
+                        <span class="tf-icons bx bx-user"></span>&nbsp; 교육생 목록
+                      </button>
                     </div>
                   </div>
                 </div>
                 <div class="col-sm-6">
-                  <button class="btn btn-primary" type="submit">
-                    <span class="tf-icons bx bx-pencil"></span>&nbsp; 등록
-                  </button>
-                </div>
-                <div class="col-sm-6">
-                  <a class="btn btn-dark" href="./list">
+                  <a class="btn btn-primary" href="./list">
                     <span class="tf-icons bx bx-list-ol"></span>&nbsp; 목록
                   </a>
-                  <button class="btn btn-primary" type="submit">
+                  <button class="btn btn-warning" type="submit">
                     <span class="tf-icons bx bx-pencil"></span>&nbsp; 등록
                   </button>
                 </div>
@@ -122,7 +117,6 @@
                   <div class="mb-3">
                     <label for="status" class="form-label">내용</label>
                     <div class="input-group input-group-merge">
-                      <span class="input-group-text"><i class="bx bx-comment"></i></span>
                       <textarea class="form-control" rows="10" id="contents" name="contents" th:text="${info.contents}" required></textarea>
                     </div>
                   </div>
@@ -148,12 +142,29 @@
                       <label class="form-check-label" for="useYn">프로그램 사용 유무를 지정해주세요.</label>
                     </div>
                   </div>
+                  <div class="mb-3 col-md-6">
+                    <label for="status" class="form-label">교육 참석자</label>
+                    <div class="input">
+                      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#attendeeModal" onclick="fnAttendee()">
+                        <span class="tf-icons bx bx-user"></span>&nbsp; 교육생 목록
+                      </button>
+                    </div>
+                  </div>
+                  <div class="mb-3 col-md-6">
+                    <label class="form-label">등록 일시</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      th:value="${info.createdDate}"
+                      readonly
+                    />
+                  </div>
                 </div>
                 <div class="col-sm-6">
-                  <a class="btn btn-dark" href="./list">
+                  <a class="btn btn-primary" href="./list">
                     <span class="tf-icons bx bx-list-ol"></span>&nbsp; 목록
                   </a>
-                  <button class="btn btn-primary" type="submit">
+                  <button class="btn btn-warning" type="submit">
                     <span class="tf-icons bx bx-pencil"></span>&nbsp; 수정
                   </button>
                 </div>
@@ -163,6 +174,40 @@
         </div>
       </div>
     </th:block>
+    <div class="modal fade" id="attendeeModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel1">교육생</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-striped">
+              <thead>
+              <tr align="center">
+                <th width="10%">
+                  <input class="form-check-input" type="checkbox" onclick="fnTrAllChk()">
+                </th>
+                <th width="50%">이름</th>
+                <th width="50%">생년월일</th>
+              </tr>
+              </thead>
+              <tbody class="table-border-bottom-0" id="tBody">
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+            <button type="button" class="btn btn-primary">대상자 선정</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <script th:inline="javascript">
     const form = document.getElementById("formProgramDetail");
@@ -175,11 +220,40 @@
       send(method, '/program/detail', 'application/json', data, [[${_csrf.token}]], function(r) {
         if (r.result > 0) {
           alert(msg.register);
+          location.href = './list';
           return;
         }
         alert(msg.error);
       });
     });
+
+    const fnAttendee = function() {
+      send('GET', '/member/list-search', 'application/json', '', '[[${_csrf.token}]]', function(r) {
+        const tBody = document.getElementById('tBody');
+        tBody.innerHTML = '';
+        let html = '';
+        if (r.resultMap.list.length > 0) {
+          const resultMap = r.resultMap;
+          resultMap.list.forEach((item, index) => {
+            html += '<tr align="center">';
+            html += '<td>';
+            html += '<input class="form-check-input" type="checkbox" name="trChk" value="'+item.id+'">';
+            html += '</td>';
+            html += '<td>'+item.name+'</td>';
+            html += '<td>'+item.birth+'</td>';
+            html += '</tr>';
+          });
+
+          tBody.innerHTML = html;
+          fnPageItemHtml(resultMap);
+         } else {
+          html += '<tr align="center">';
+          html += '<td colspan="3" rowspan="8">검색 결과가 없습니다.</td>';
+          html += '</tr>';
+          tBody.innerHTML = html;
+         }
+      });
+    }
   </script>
 </th:block>
 </html>
