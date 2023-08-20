@@ -20,7 +20,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
-@Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -66,14 +65,16 @@ public class MemberService implements UserDetailsService {
             .execute();
     }
 
+    @Transactional(readOnly = true)
     public HashMap<String, Object> findAll(MemberSearchRequest request, Integer page, Integer pageSize) {
         HashMap<String, Object> resultMap = new HashMap<>();
 
         List<MemberInfoResponse> list = jpaQueryFactory
             .select(Projections.constructor(MemberInfoResponse.class,
                 member.id,
-                member.name,
                 member.email,
+                member.name,
+                member.birth,
                 member.useYn,
                 member.loginDate,
                 member.createdDate

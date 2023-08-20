@@ -9,8 +9,9 @@ import java.time.LocalDateTime;
 @Getter
 public class MemberInfoResponse extends BaseTimeEntity {
     private Long id;
-    private String name;
     private String email;
+    private String name;
+    private String birth;
     private String password;
     private String prevPassword;
     private String tempPasswordYn;
@@ -23,8 +24,9 @@ public class MemberInfoResponse extends BaseTimeEntity {
 
     public MemberInfoResponse(Member member) {
         this.id = member.getId();
-        this.name = member.getName();
         this.email = member.getEmail();
+        this.name = member.getName();
+        this.birth = member.getBirth();
         this.password = member.getPassword();
         this.prevPassword = member.getPrevPassword();
         this.tempPasswordYn = member.getTempPasswordYn();
@@ -36,10 +38,11 @@ public class MemberInfoResponse extends BaseTimeEntity {
         this.createDate = DateUtils.toStringDateTime(member.getCreatedDate());
     }
 
-    public MemberInfoResponse(Long id, String name, String email, String useYn, LocalDateTime loginDate, LocalDateTime createDate) {
+    public MemberInfoResponse(Long id, String email, String name, String birth, String useYn, LocalDateTime loginDate, LocalDateTime createDate) {
         this.id = id;
-        this.name = name;
         this.email = email;
+        this.name = name;
+        this.birth = birth;
         this.useYn = useYn;
         this.loginDate = DateUtils.toStringDateTime(loginDate);
         this.createDate = DateUtils.toStringDateTime(createDate);
