@@ -53,6 +53,17 @@ const fnPageItemHtml = function(resultMap) {
   document.getElementById('pagination').innerHTML = html;
 }
 
+const fnTrAllChk = function() {
+  const tr = document.getElementsByName('trChk');
+  tr.forEach(element => {
+    if (element.checked) {
+      element.checked = false;
+    } else {
+      element.checked = true;
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   // [lnb] Current page add class active
   const lnbMenu = document.querySelectorAll('.menu-item');

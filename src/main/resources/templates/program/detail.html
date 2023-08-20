@@ -42,7 +42,6 @@
                   <div class="mb-3">
                     <label for="status" class="form-label">내용</label>
                     <div class="input-group input-group-merge">
-                      <span class="input-group-text"><i class="bx bx-comment"></i></span>
                       <textarea class="form-control" rows="10" id="contents" name="contents" required></textarea>
                     </div>
                   </div>
@@ -68,24 +67,12 @@
                       <label class="form-check-label" for="useYn">프로그램 사용 유무를 지정해주세요.</label>
                     </div>
                   </div>
-                  <div class="mb-3 col-md-6">
-                    <label for="status" class="form-label">사용 유무</label>
-                    <div class="form-check form-switch mb-2">
-                      <input class="form-check-input" type="checkbox" id="useYn" name="useYn" value="Y">
-                      <label class="form-check-label" for="useYn">프로그램 사용 유무를 지정해주세요.</label>
-                    </div>
-                  </div>
                 </div>
                 <div class="col-sm-6">
-                  <button class="btn btn-primary" type="submit">
-                    <span class="tf-icons bx bx-pencil"></span>&nbsp; 등록
-                  </button>
-                </div>
-                <div class="col-sm-6">
-                  <a class="btn btn-dark" href="./list">
+                  <a class="btn btn-primary" href="./list">
                     <span class="tf-icons bx bx-list-ol"></span>&nbsp; 목록
                   </a>
-                  <button class="btn btn-primary" type="submit">
+                  <button class="btn btn-warning" type="submit">
                     <span class="tf-icons bx bx-pencil"></span>&nbsp; 등록
                   </button>
                 </div>
@@ -122,7 +109,6 @@
                   <div class="mb-3">
                     <label for="status" class="form-label">내용</label>
                     <div class="input-group input-group-merge">
-                      <span class="input-group-text"><i class="bx bx-comment"></i></span>
                       <textarea class="form-control" rows="10" id="contents" name="contents" th:text="${info.contents}" required></textarea>
                     </div>
                   </div>
@@ -150,10 +136,10 @@
                   </div>
                 </div>
                 <div class="col-sm-6">
-                  <a class="btn btn-dark" href="./list">
+                  <a class="btn btn-primary" href="./list">
                     <span class="tf-icons bx bx-list-ol"></span>&nbsp; 목록
                   </a>
-                  <button class="btn btn-primary" type="submit">
+                  <button class="btn btn-warning" type="submit">
                     <span class="tf-icons bx bx-pencil"></span>&nbsp; 수정
                   </button>
                 </div>
@@ -175,6 +161,7 @@
       send(method, '/program/detail', 'application/json', data, [[${_csrf.token}]], function(r) {
         if (r.result > 0) {
           alert(msg.register);
+          location.href = './list';
           return;
         }
         alert(msg.error);
